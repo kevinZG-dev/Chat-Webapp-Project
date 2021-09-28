@@ -13,6 +13,7 @@ const content = '<!DOCTYPE html>' +
 '       <p>Hello World!</p>' +
 '    </body>' +
 '</html>'
+
 const serverHandle = function (req, res) {
   // Retrieve and print the queryParams
   const queryParams = qs.parse(url.parse(req.url).query);
