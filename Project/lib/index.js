@@ -1,26 +1,16 @@
-// const express = require('express')
-// const app = express()
-const config = {
-  port: 3000
-}
-const data = {
-  channels: [{
-    id: '1',
-    name: 'Channel 1',
-  },{
-    id: '2',
-    name: 'Channel 2',
-  },{
-    id: '3',
-    name: 'Channel 3',
-  }]
-}
+const express = require('express')
+const app = express()
+
+const config = require('./config')
+const {data} = require('./db')
+
 
 app.get('/', (req, res) => {
   // Project homepage
   // Return some HTML content inside `body` with:
   // * The page title
   // * A link to the `/channels` page
+  res.render('homepage.ejs');
   // Don't bother with the `head` tag
 })
 
@@ -38,8 +28,19 @@ app.get('/channels', (req, res) => {
 app.get('/channel/:id', (req, res) => {
   // Channel information
   // Print the channel title
+  const channelId = req.params.id;
+  const channel = data.channels.find( (channel) => channel.id == channelId);
+
+  if(channel){
+    es.render('channel.ejs', {channel: channel});
+  }else{
+    res.error('Invalid channel');
+  }
 })
 
-// app.listen(config.port, () => {
-//   console.log(`Chat is waiting for you at http://localhost:${config.port}`)
-// })
+app.listen(config.port, () => {   
+  console.log(`Chat is waiting for you at http://localhost:${config.port}`)
+})
+
+app.set('view', __dirname + "/views")
+app.set('view enfine', 'ejs')
