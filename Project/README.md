@@ -39,8 +39,6 @@ How to install the application ?
 
 ## Code
 
-[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=/nuxeo/addons_nuxeo-sample-project-master)](https://qa.nuxeo.org/jenkins/job/nuxeo/job/addons_nuxeo-sample-project-master/)
-
 ### Content
 
 Description, sub-modules organization...
@@ -52,4 +50,3 @@ Express.js
 
 ## License
 
-[Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
