@@ -9,9 +9,9 @@ All notable changes to this project will be documented in this file.
   Lab2 : express.js
   * Readme file
   * Lib file :
-    ** index.js  
-    ** config.js
-    ** db.js
+    - index.js  
+    - config.js
+    - db.js
   * Changelog file
 
 ### Changed
