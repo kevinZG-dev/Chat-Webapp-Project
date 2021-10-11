@@ -1,5 +1,6 @@
 #!env node
 
+const app = require('../lib/app')
 const config = {
   port: 3000
 }
