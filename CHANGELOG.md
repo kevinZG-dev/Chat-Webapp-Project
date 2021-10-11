@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file.
  
  
+## [1.2.0] - 2021-10-08
+ 
+### Added
+ 
+  Lab3 : ajout lab3
+
+### Changed
+  
+ 
+### Fixed
+
+
 ## [1.1.0] - 2021-10-08
  
 ### Added
