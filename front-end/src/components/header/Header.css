@@ -1,12 +1,28 @@
 .header {
-  display: flex;
+  /* display: flex; */
   width: 100%;
   background-color: #2669f0;
-  padding: 15px 25px;
+  padding: 8px 25px;
 }
 
-.header img {
-  /*display: block;*/
+.header_blocks {
+  display: inline-block;
+  vertical-align: middle;
   max-width: 80%;
+}
+
+.header_blocks img {
   cursor: pointer;
+}
+
+.header_blocks p {
+  padding-left: 981px;
+  align-items: center;
+  font-weight: 800;
+  color: #fff;
+}
+
+.user_avatar {
+  padding-left: 20px;
+  align-items: center;
 }
