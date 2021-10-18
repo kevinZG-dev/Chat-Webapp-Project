@@ -1,39 +1,32 @@
 import React, { Component } from "react";
 import "./Channels.css";
 import ChannelsItems from "./ChannelsItems";
+import user1 from "./../../images/user1.jpg";
+import user2 from "./../../images/user2.jpg";
+import user3 from "./../../images/user3.jpg";
+import user4 from "./../../images/user4.jpg";
 
 export default class Channels extends Component {
   allChatUsers = [
     {
-      image: "../../images/user1.jpg",
+      image: user1,
       id: 1,
       name: "Maxime Attal",
-      active: true,
-      isOnline: true,
     },
     {
-      image:
-        "../../images/user2.jpg",
+      image: user2,
       id: 2,
       name: "Kevin Zheng",
-      active: false,
-      isOnline: false,
     },
     {
-      image:
-        "../../images/user3.jpg",
+      image: user3,
       id: 3,
       name: "Donatello Turtle",
-      active: false,
-      isOnline: false,
     },
     {
-      image:
-        "../../images/user4.jpg",
+      image: user4,
       id: 4,
       name: "Michelangelo Turtle",
-      active: false,
-      isOnline: true,
     },
   ];
   constructor(props) {
@@ -68,8 +61,6 @@ export default class Channels extends Component {
                 name={item.name}
                 key={item.id}
                 animationDelay={index + 1}
-                active={item.active ? "active" : ""}
-                isOnline={item.isOnline ? "active" : ""}
                 image={item.image}
               />
             );

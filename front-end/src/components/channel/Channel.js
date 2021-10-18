@@ -2,50 +2,45 @@ import React, { Component, useState, createRef, useEffect } from "react";
 import "./Channel.css";
 import Avatar from "../channels/Avatar";
 import Messages from "./Messages";
-
+import user1 from "./../../images/user1.jpg";
+import user5 from "./../../images/user5.jpg";
 
 export default class Channel extends Component {
   messagesEndRef = createRef(null);
   chatMsg = [
     {
       key: 1,
-      image:
-        "../../images/user5.jpg",
+      image: user5,
       type: "",
       msg: "Hi, I'm Leonardo from Ninja Turtles.",
     },
     {
       key: 2,
-      image:
-        "../../images/user1.jpg",
+      image: user1,
       type: "other",
       msg: "Wesh, I'm Maxime I love your show !",
     },
     {
       key: 3,
-      image:
-        "../../images/user5.jpg",
+      image: user5,
       type: "",
       msg: "Hi, I'm Leonardo from Ninja Turtles.",
     },
     {
       key: 4,
-      image:
-        "../../images/user1.jpg",
+      image: user1,
       type: "other",
       msg: "Hi, I'm Leonardo from Ninja Turtles.",
     },
     {
       key: 5,
-      image:
-        "../../images/user5.jpg",
+      image: user5,
       type: "",
       msg: "Hi, I'm Leonardo from Ninja Turtles.",
     },
     {
       key: 6,
-      image:
-        "../../images/user1.jpg",
+      image: user1,
       type: "other",
       msg: "Hi, I'm Leonardo from Ninja Turtles.",
     },
@@ -71,8 +66,7 @@ export default class Channel extends Component {
             key: 1,
             type: "",
             msg: this.state.msg,
-            image:
-              "../../images/user5.jpg",
+            image:user5,
           });
           this.setState({ chat: [...this.chatMsg] });
           this.scrollToBottom();
@@ -93,8 +87,7 @@ export default class Channel extends Component {
           <div className="blocks">
             <div className="current-channel-user">
               <Avatar
-                isOnline="active"
-                image="../../images/user1.jpg"
+                image={user1}
               />
               <p>Maxime Attal</p>
             </div>

@@ -85,6 +85,7 @@
   margin-right: 20px;
   position: relative;
 }
+
 .avatar img {
   max-width: 100%;
   object-fit: cover;
@@ -110,20 +111,7 @@
 
   border-radius: 10px;
 }
-.isOnline {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: #f2dc35;
-  border-radius: 50%;
-  border: 2px solid #fff;
-}
-.isOnline.active {
-  background-color: #6ceb7b;
-}
+
 .avatar-img {
   overflow: hidden;
   border-radius: 50%;
