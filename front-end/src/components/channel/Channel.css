@@ -1,0 +1,146 @@
+.main_channel {
+  flex-grow: 1;
+  padding: 20px 40px;
+  max-width: 90%;
+  border-right: 1px solid #ebe7fb;
+}
+.content_header {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ebe7fb;
+}
+.current-channel-user {
+  display: flex;
+  align-items: center;
+}
+.current-channel-user p {
+  margin: 0;
+  font-weight: 600;
+}
+.content_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.content_message {
+  height: 70%;
+  overflow: auto;
+}
+.message {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+  transform: scale(0);
+  transform-origin: right;
+  animation-name: showIn;
+  animation-duration: 0.2s; /* or: Xms */
+  animation-iteration-count: 1;
+  animation-direction: normal; /* or: normal */
+  animation-timing-function: cubic-bezier(
+    0.88,
+    0.19,
+    0.37,
+    1.11
+  ); /* or: ease, ease-in, ease-in-out, linear, cubic-bezier(x1, y1, x2, y2) */
+  animation-fill-mode: both; /* or: backwards, both, none */
+  animation-delay: 0.2s; /* or: Xms */
+}
+@keyframes showIn {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.message .avatar {
+  margin-right: 15px;
+  margin-left: 20px;
+  background: #fff;
+  padding: 1px;
+}
+.message_content {
+  background-color: #2669f0;
+  color: #fff;
+  padding: 15px;
+  border-radius: 10px 10px 0 10px;
+  max-width: 50%;
+  min-width: 215px;
+}
+.message.me {
+  padding-top: 15px;
+}
+.message_content .channel_meta {
+  justify-content: space-between;
+  display: flex;
+  margin-top: 10px;
+}
+.message_content .channel_meta span {
+  font-size: 14px;
+  color: #274175;
+  user-select: none;
+}
+.channel_msg {
+  user-select: none;
+}
+
+.message.other {
+  flex-direction: row-reverse;
+  transform-origin: left;
+}
+.message.other .message_content {
+  background-color: #ebebed;
+  color: #000;
+  border-radius: 10px 10px 10px 0;
+  max-width: 50%;
+}
+.message.other .avatar {
+  margin-right: 20px;
+  margin-left: 0px;
+}
+.message.other .message_content .channel_meta span {
+  color: #919191;
+}
+.content_messageSend {
+  padding-top: 20px;
+}
+.sendNewMessage {
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 8px;
+}
+.sendNewMessage button {
+  width: 36px;
+  height: 36px;
+  background-color: #c6d6f5;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #2669f0;
+  padding: 0;
+  border-radius: 5px;
+  line-height: 36px;
+  transition: all 0.3s cubic-bezier(0.88, 0.19, 0.37, 1.11);
+}
+.sendNewMessage button:hover {
+  transform: scale(1.2);
+}
+.sendNewMessage button i {
+  display: block;
+}
+.sendNewMessage input {
+  flex-grow: 1;
+  padding: 0 15px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+#sendMsgButton {
+  background-color: #2669f0;
+  color: #fff;
+}
