@@ -1,17 +1,17 @@
-import React from "react";
 import "./App.css";
-import Header from "./components/header/Header";
+/** @jsx jsx */
+import { jsx } from "@emotion/core";
 import Main from "./components/chatBody/Main";
+import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 
-function App() {
+const App = () => {
   return (
-    <div className="_app">
+    <div className="App">
       <Header />
       <Main />
       <Footer />
     </div>
   );
-}
-
+};
 export default App;

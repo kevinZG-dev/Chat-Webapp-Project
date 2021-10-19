@@ -1,132 +1,68 @@
-import React, { Component, useState, createRef, useEffect } from "react";
+import React from "react";
+import { useState } from "react";
 import "./Channel.css";
-import Avatar from "../channels/Avatar";
-import Messages from "./Messages";
-import user1 from "./../../images/user1.jpg";
-import user5 from "./../../images/user5.jpg";
-
-export default class Channel extends Component {
-  messagesEndRef = createRef(null);
-  chatMsg = [
+import MessageForm from "../messageForm/MessageForm";
+import { DateTime } from "luxon";
+const Channel = ({
+  channel = {
+    name: "Fake channel",
+  },
+}) => {
+  const [messages, setMessages] = useState([
     {
-      key: 1,
-      image: user5,
-      type: "",
-      msg: "Hi, I'm Leonardo from Ninja Turtles.",
+      author: "Maxime",
+      creation: 1602831101929,
+      content: "Hi, my name is Maxime ! How are you doing today ?",
     },
     {
-      key: 2,
-      image: user1,
-      type: "other",
-      msg: "Wesh, I'm Maxime I love your show !",
+      author: "Kevin",
+      creation: 1602832138892,
+      content:
+        "Hello Maxime, I'm Kevin, I'm fine but a little bit tired, and you ?",
     },
     {
-      key: 3,
-      image: user5,
-      type: "",
-      msg: "Hi, I'm Leonardo from Ninja Turtles.",
+      author: "Maxime",
+      creation: 1602840139202,
+      content: "I understand, we have a heavy course workload bro! ",
     },
     {
-      key: 4,
-      image: user1,
-      type: "other",
-      msg: "Hi, I'm Leonardo from Ninja Turtles.",
+      author: "Kevin",
+      creation: 1602844139200,
+      content: "So, what are you up today ?",
     },
-    {
-      key: 5,
-      image: user5,
-      type: "",
-      msg: "Hi, I'm Leonardo from Ninja Turtles.",
-    },
-    {
-      key: 6,
-      image: user1,
-      type: "other",
-      msg: "Hi, I'm Leonardo from Ninja Turtles.",
-    },
-  ];
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      chat: this.chatMsg,
-      msg: "",
-    };
-  }
-
-  scrollToBottom = () => {
-    this.messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  ]);
+  const addMessage = (message) => {
+    setMessages([...messages, message]);
   };
-
-  componentDidMount() {
-    window.addEventListener("keydown", (e) => {
-      if (e.keyCode == 13) {
-        if (this.state.msg != "") {
-          this.chatMsg.push({
-            key: 1,
-            type: "",
-            msg: this.state.msg,
-            image:user5,
-          });
-          this.setState({ chat: [...this.chatMsg] });
-          this.scrollToBottom();
-          this.setState({ msg: "" });
-        }
-      }
-    });
-    this.scrollToBottom();
-  }
-  onStateChange = (e) => {
-    this.setState({ msg: e.target.value });
-  };
-
-  render() {
-    return (
-      <div className="main_channel">
-        <div className="content_header">
-          <div className="blocks">
-            <div className="current-channel-user">
-              <Avatar
-                image={user1}
-              />
-              <p>Maxime Attal</p>
-            </div>
-          </div>
-        </div>
-        <div className="content_message">
-          <div className="messages">
-            {this.state.chat.map((itm, index) => {
-              return (
-                <Messages
-                  animationDelay={index + 2}
-                  key={itm.key}
-                  user={itm.type ? itm.type : "me"}
-                  msg={itm.msg}
-                  image={itm.image}
-                />
-              );
-            })}
-            <div ref={this.messagesEndRef} />
-          </div>
-        </div>
-        <div className="content_messageSend">
-          <div className="sendNewMessage">
-            <button className="addFiles">
-              <i className="fa fa-plus"></i>
-            </button>
-            <input
-              type="text"
-              placeholder="Type a message here"
-              onChange={this.onStateChange}
-              value={this.state.msg}
-            />
-            <button className="buttonSendMsg" id="sendMsgButton">
-              <i className="fa fa-paper-plane"></i>
-            </button>
-          </div>
-        </div>
+  return (
+    <div className="channel">
+      <div className="messages">
+        <h1>Messages for {channel.name}</h1>
+        <ul>
+          {messages.map((message, i) => (
+            <li key={i} className="message">
+              <p>
+                <span>{message.author}</span>{" "}
+                <span>
+                  {new DateTime(message.creation)
+                    .toLocaleString(DateTime.DATETIME_MED)
+                    .toString()}
+                </span>
+              </p>
+              <div>
+                {message.content
+                  .split(/(\n +\n)/)
+                  .filter((el) => el.trim())
+                  .map((el) => (
+                    <p>{el}</p>
+                  ))}
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
-    );
-  }
-
-}
+      <MessageForm addMessage={addMessage} />
+    </div>
+  );
+};
+export default Channel;
