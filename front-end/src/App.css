@@ -1,17 +1,16 @@
-* {
-  box-sizing: border-box;
-}
-html,
-body {
-  height: 100%;
-}
+
+@import-normalize;
+
 .App {
   color: #fff;
   position: absolute;
   height: 100%;
   width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  background-color: #565e71;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  text-indent: 0;
+  list-style-type: none;
 }
