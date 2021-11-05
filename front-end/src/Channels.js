@@ -3,12 +3,12 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 // Layout
-import { Link } from '@mui/material';
+import {Link} from '@mui/material';
 
 const styles = {
-  root: {
-    minWidth: '200px',
-  },
+  // root: {
+  //   minWidth: '200px',
+  // },
   channel: {
     padding: '.2rem .5rem',
     whiteSpace: 'nowrap', 

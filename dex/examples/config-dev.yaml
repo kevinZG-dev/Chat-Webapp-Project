@@ -48,6 +48,7 @@ storage:
 # Configuration for the HTTP endpoints.
 web:
   http: 0.0.0.0:5556
+  allowedOrigins: ['*']
   # Uncomment for HTTPS options.
   # https: 127.0.0.1:5554
   # tlsCert: /etc/dex/tls.crt
@@ -110,12 +111,12 @@ staticClients:
   redirectURIs:
   - 'http://127.0.0.1:5555/callback'
   name: 'Example App'
-  secret: ZXhhbXBsZS1hcHAtc2VjcmV0
+  # secret: ZXhhbXBsZS1hcHAtc2VjcmV0
 #  - id: example-device-client
 #    redirectURIs:
 #      - /device/callback
 #    name: 'Static Client for Device Flow'
-#    public: true
+  public: true
 connectors:
 - type: mockCallback
   id: mock
@@ -131,6 +132,18 @@ connectors:
 #     redirectURI: http://127.0.0.1:5556/dex/callback
 #     hostedDomains:
 #     - $GOOGLE_HOSTED_DOMAIN
+
+- type: github
+  # Required field for connector id.
+  id: github
+  # Required field for connector name.
+  name: GitHub
+  config:
+    # Credentials can be string literals or pulled from the environment.
+    clientID: 468a5d2e80711ec12617
+    clientSecret: d1d2d78f2ff334c40250bc57f739757fc0fbdde3
+    redirectURI: http://127.0.0.1:5556/dex/callback
+
 
 # Let dex keep a list of passwords which can be used to login to dex.
 enablePasswordDB: true
