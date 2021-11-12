@@ -109,7 +109,7 @@ telemetry:
 staticClients:
 - id: example-app
   redirectURIs:
-  - 'http://127.0.0.1:5555/callback'
+  - 'http://127.0.0.1:3000'
   name: 'Example App'
   # secret: ZXhhbXBsZS1hcHAtc2VjcmV0
 #  - id: example-device-client
@@ -141,7 +141,7 @@ connectors:
   config:
     # Credentials can be string literals or pulled from the environment.
     clientID: 468a5d2e80711ec12617
-    clientSecret: d1d2d78f2ff334c40250bc57f739757fc0fbdde3
+    clientSecret: b5b7e5e1c21c2b0b7c2a200b727869537ec26371
     redirectURI: http://127.0.0.1:5556/dex/callback
 
 

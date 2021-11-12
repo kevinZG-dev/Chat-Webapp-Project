@@ -132,7 +132,7 @@ export default function Login({
   const config = {
     authorization_endpoint: 'http://127.0.0.1:5556/dex/auth',
     token_endpoint: 'http://127.0.0.1:5556/dex/token',
-    client_id: 'webtech-frontend',
+    client_id: 'example-app',
     redirect_uri: 'http://127.0.0.1:3000',
     scope: 'openid%20email%20offline_access',
   }
@@ -161,5 +161,5 @@ export default function Login({
         removeCookie={removeCookie} />
     )
   }
-  
+
 }
