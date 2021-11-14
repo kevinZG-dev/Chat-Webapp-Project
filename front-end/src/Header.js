@@ -4,6 +4,9 @@
 import { useTheme } from '@mui/styles';
 import {IconButton} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useContext } from 'react';
+import Context from './Context';
+import jwtDecode from 'jwt-decode';
 
 const useStyles = (theme) => ({
   header: {
@@ -31,6 +34,10 @@ export default function Header({
   const handleDrawerToggle = (e) => {
     drawerToggleListener()
   }
+  const {user}  = useContext(Context);
+
+  
+  
   return (
     <header css={styles.header}>
       <IconButton
@@ -41,7 +48,8 @@ export default function Header({
       >
         <MenuIcon />
       </IconButton>
-      Header
+      Welcome {user}
+      
     </header>
   );
 }

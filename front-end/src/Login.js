@@ -8,7 +8,8 @@ import axios from 'axios'
 // Layout
 import { useTheme } from '@mui/styles';
 import {Link} from '@mui/material';
-
+import { useContext } from 'react';
+import Context from './Context';
 const base64URLEncode = (str) => {
   return str.toString('base64')
     .replace(/\+/g, '-')
@@ -79,6 +80,7 @@ const Tokens = ({
   const {id_token} = oauth
   const id_payload = id_token.split('.')[1]
   const {email} = JSON.parse(atob(id_payload))
+  const { user, setUser } = useContext(Context);
   const logout = (e) => {
     e.stopPropagation()
     removeCookie('oauth')
@@ -86,6 +88,8 @@ const Tokens = ({
   return (
     <div css={styles.root}>
       Welcome {email} <Link onClick={logout} color="secondary">logout</Link>
+      {setUser(id_token)}
+      
     </div>
   )
 }
@@ -98,6 +102,7 @@ const LoadToken = function({
   setCookie
 }) {
   const styles = useStyles(useTheme())
+
   useEffect( () => {
     const fetch = async () => {
       try {
@@ -159,6 +164,7 @@ export default function Login({
         config={config}
         setCookie={setCookie}
         removeCookie={removeCookie} />
+       
     )
   }
 
