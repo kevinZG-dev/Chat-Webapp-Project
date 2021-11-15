@@ -36,7 +36,13 @@ export default function Header({
   }
   const {user}  = useContext(Context);
 
-  
+  let temp = null
+  if(user!==null) {
+    temp = jwtDecode(user)
+  }
+  else {
+    temp = null
+  }
   
   return (
     <header css={styles.header}>
@@ -48,7 +54,7 @@ export default function Header({
       >
         <MenuIcon />
       </IconButton>
-      Welcome {user}
+      Welcome { temp ? temp.email : temp} !
       
     </header>
   );

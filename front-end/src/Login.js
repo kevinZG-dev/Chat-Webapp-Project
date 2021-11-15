@@ -80,7 +80,9 @@ const Tokens = ({
   const {id_token} = oauth
   const id_payload = id_token.split('.')[1]
   const {email} = JSON.parse(atob(id_payload))
-  const { user, setUser } = useContext(Context);
+  const { setUser } = useContext(Context);
+  setUser(id_token)
+
   const logout = (e) => {
     e.stopPropagation()
     removeCookie('oauth')
@@ -88,8 +90,6 @@ const Tokens = ({
   return (
     <div css={styles.root}>
       Welcome {email} <Link onClick={logout} color="secondary">logout</Link>
-      {setUser(id_token)}
-      
     </div>
   )
 }
