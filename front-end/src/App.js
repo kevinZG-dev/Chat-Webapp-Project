@@ -1,6 +1,6 @@
 
 /** @jsxImportSource @emotion/react */
-import { useState, createContext } from 'react'
+import { useState } from 'react'
 import './App.css';
 // Local
 import Footer from './Footer'
@@ -21,7 +21,6 @@ const styles = {
 
 export default function App() {
   const [user, setUser] = useState(null)
-  
   const [drawerMobileVisible, setDrawerMobileVisible] = useState(false)
   const drawerToggleListener = () => {
     setDrawerMobileVisible(!drawerMobileVisible)

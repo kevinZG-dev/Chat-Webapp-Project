@@ -12,6 +12,7 @@ const useStyles = (theme) => ({
   header: {
     padding: theme.spacing(1),
     backgroundColor: 'rgba(255,255,255,.3)',
+    color: 'rgb(0,0,200)',
     flexShrink: 0,
   },
   headerLogIn: {
@@ -35,7 +36,7 @@ export default function Header({
     drawerToggleListener()
   }
   const {user}  = useContext(Context);
-
+  console.log(user)
   let temp = null
   if(user!==null) {
     temp = jwtDecode(user)
