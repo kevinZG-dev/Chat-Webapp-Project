@@ -1,17 +1,22 @@
 
 /** @jsxImportSource @emotion/react */
-import {useState} from 'react'
+import {useContext} from 'react'
 // Layout
 import { useTheme } from '@mui/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import {Drawer} from '@mui/material';
+import { Drawer } from '@mui/material';
 // Local
+import Context from './Context'
 import Channels from './Channels'
 import Channel from './Channel'
 import Welcome from './Welcome'
+import {
+  Route,
+  Routes,
+} from 'react-router-dom'
 
 const useStyles = (theme) => ({
-  main: {
+  root: {
     backgroundColor: '#373B44',
     overflow: 'hidden',
     flex: '1 1 auto',
@@ -28,19 +33,18 @@ const useStyles = (theme) => ({
   },
 })
 
-export default function Main({
-  drawerMobileVisible,
-}) {
-  const [channel, setChannel] = useState(null)
-  const fetchChannel = async (channel) => {
-    setChannel(channel)
-  }
+export default function Main() {
+  const {
+    // currentChannel, not yet used
+    drawerVisible,
+  } = useContext(Context)
+  
   const theme = useTheme()
   const styles = useStyles(theme)
   const alwaysOpen = useMediaQuery(theme.breakpoints.up('sm'))
-  const isDrawerVisible = alwaysOpen || drawerMobileVisible
+  const isDrawerVisible = alwaysOpen || drawerVisible
   return (
-    <main css={styles.main}>
+    <main css={styles.root}>
       <Drawer
         PaperProps={{ style: { position: 'relative' } }}
         BackdropProps={{ style: { position: 'relative' } }}
@@ -51,9 +55,12 @@ export default function Main({
         open={isDrawerVisible}
         css={[styles.drawer, isDrawerVisible && styles.drawerVisible]}
       >
-        <Channels onChannel={fetchChannel} />
+        <Channels />
       </Drawer>
-      {channel ? <Channel channel={channel} messages={[]} /> : <Welcome />}
+      <Routes>
+        <Route path=":id" element={<Channel />}/>
+        <Route path="*" element={<Welcome />}/>
+      </Routes>
     </main>
   );
 }

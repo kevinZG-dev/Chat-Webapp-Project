@@ -1,18 +1,16 @@
 
 /** @jsxImportSource @emotion/react */
+import { useContext } from 'react';
 // Layout
 import { useTheme } from '@mui/styles';
-import {IconButton} from '@mui/material';
+import { IconButton, Link } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useContext } from 'react';
 import Context from './Context';
-import jwtDecode from 'jwt-decode';
 
 const useStyles = (theme) => ({
   header: {
     padding: theme.spacing(1),
     backgroundColor: 'rgba(255,255,255,.3)',
-    color: 'rgb(0,0,200)',
     flexShrink: 0,
   },
   headerLogIn: {
@@ -32,30 +30,37 @@ export default function Header({
   drawerToggleListener
 }) {
   const styles = useStyles(useTheme())
-  const handleDrawerToggle = (e) => {
-    drawerToggleListener()
+  const {
+    oauth, setOauth,
+    drawerVisible, setDrawerVisible
+  } = useContext(Context)
+  const drawerToggle = (e) => {
+    setDrawerVisible(!drawerVisible)
   }
-  const {user}  = useContext(Context);
-  console.log(user)
-  let temp = null
-  if(user!==null) {
-    temp = jwtDecode(user)
+  const onClickLogout = (e) => {
+    e.stopPropagation()
+    setOauth(null)
   }
-  else {
-    temp = null
-  }
-  
   return (
     <header css={styles.header}>
       <IconButton
         color="inherit"
         aria-label="open drawer"
-        onClick={handleDrawerToggle}
+        onClick={drawerToggle}
         css={styles.menu}
       >
         <MenuIcon />
       </IconButton>
-      Welcome { temp ? temp.email : temp} !
+      Header
+      {
+        oauth ?
+          <span>
+            {oauth.email}
+            <Link onClick={onClickLogout}>logout</Link>
+          </span>
+        :
+          <span>new user</span>
+      }
       
     </header>
   );

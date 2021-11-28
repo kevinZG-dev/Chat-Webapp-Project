@@ -3,10 +3,14 @@ import ReactDOM from 'react-dom';
 import { CookiesProvider } from 'react-cookie';
 import './index.css';
 import App from './App';
+import { Provider as ContextProvider } from './Context';
 import * as serviceWorker from './serviceWorker';
 import 'typeface-roboto'
 // Layout
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
 
 const theme = createTheme({
   palette: {
@@ -16,13 +20,15 @@ const theme = createTheme({
 
 ReactDOM.render(
   <React.StrictMode>
-    
+    <ContextProvider>
       <CookiesProvider>
         <ThemeProvider theme={theme}>
-          <App />
+          <Router>
+            <App />
+          </Router>
         </ThemeProvider>
       </CookiesProvider>
-    
+    </ContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

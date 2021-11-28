@@ -1,13 +1,20 @@
 
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react'
-import './App.css';
+import { useContext, useState } from 'react'
 // Local
+import Oups from './Oups'
 import Footer from './Footer'
 import Header from './Header'
 import Main from './Main'
 import Login from './Login'
-import Context from './Context';
+import Context from './Context'
+// Rooter
+import {
+  Route,
+  Routes,
+  Navigate,
+  useLocation
+} from "react-router-dom"
 
 const styles = {
   root: {
@@ -20,22 +27,33 @@ const styles = {
 }
 
 export default function App() {
-  const [user, setUser] = useState(null)
+  const location = useLocation()
+  const {oauth} = useContext(Context)
   const [drawerMobileVisible, setDrawerMobileVisible] = useState(false)
   const drawerToggleListener = () => {
     setDrawerMobileVisible(!drawerMobileVisible)
   }
-
+  const gochannels = (<Navigate
+    to={{
+      pathname: "/channels",
+      state: { from: location }
+    }}
+  />)
+  const gohome = (<Navigate
+    to={{
+      pathname: "/",
+      state: { from: location }
+    }}
+  />)
   return (
     <div className="App" css={styles.root}>
-      <Context.Provider value = {{user, setUser}}>
-        <Header drawerToggleListener={drawerToggleListener} />
-        {
-          user ? <Main drawerMobileVisible={drawerMobileVisible} /> : <Login onUser={setUser} />
-        }
-        <Footer />
-        
-      </Context.Provider>
+      <Header drawerToggleListener={drawerToggleListener}/>
+      <Routes>
+        <Route exact path="/" element={oauth ? (gochannels) : (<Login />)}/>
+        <Route path="/channels/*" element={oauth ? (<Main />) : (gohome)}/>
+        <Route path="/Oups" element={<Oups />} />
+      </Routes>
+      <Footer />
     </div>
   );
 }
