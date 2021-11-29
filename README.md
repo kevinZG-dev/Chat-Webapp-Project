@@ -9,8 +9,8 @@
 
 * Clone this repository, from your local machine:
   ```
-  git clone https://github.com/adaltas/ece-webtech-2021-fall.git webtech
-  cd webtech/courses/webtech/project
+  git clone 
+  cd WebTech/project
   ```
   
 * Install [Go](https://golang.org/) and [Dex](https://dexidp.io/docs/getting-started/). For example, on Ubuntu, from your project root directory:   
@@ -31,7 +31,7 @@
 * Now that Dex is built and configured, you can start the Dex server:
   ```yaml
   cd dex
-  bin/dex serve dex-config/config.yaml
+  bin/dex serve ../dex-config/config.yaml
   ```
   
 * Start the back-end
