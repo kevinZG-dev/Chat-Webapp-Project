@@ -22,7 +22,8 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     //backgroundColor: '#eff4f7',
-    backgroundColor: '#1652a1',
+    //backgroundColor: '#1652a1',
+    backgroundColor: '#103c76',
  
   },
 }

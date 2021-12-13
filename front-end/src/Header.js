@@ -14,7 +14,7 @@ const useStyles = (theme) => ({
 
     height: "70px",
 
-    backgroundColor: '#1652a1',
+    backgroundColor: '#103c76',
     flexShrink: 0,
     outline: 'none',
     border: 'none',
