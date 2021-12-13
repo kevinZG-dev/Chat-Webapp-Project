@@ -46,7 +46,7 @@ export default function Main() {
   return (
     <main css={styles.root}>
       <Drawer
-        PaperProps={{ style: { position: 'relative' } }}
+        PaperProps={{ style: { position: 'relative', backgroundColor: '#1652a1' } }}
         BackdropProps={{ style: { position: 'relative' } }}
         ModalProps={{
           style: { position: 'relative' }
@@ -54,6 +54,7 @@ export default function Main() {
         variant="persistent"
         open={isDrawerVisible}
         css={[styles.drawer, isDrawerVisible && styles.drawerVisible]}
+        
       >
         <Channels />
       </Drawer>

@@ -20,6 +20,7 @@ const useStyles = (theme) => ({
     flexDirection: 'column',
     position: 'relative',
     overflowX: 'auto',
+    backgroundColor: '#3f86e5',
   },
   fab: {
     position: 'absolute !important',
