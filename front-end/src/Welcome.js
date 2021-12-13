@@ -12,6 +12,8 @@ const useStyles = (theme) => ({
     height: '100%',
     flex: '1 1 auto',
     display: 'flex',
+    backgroundColor: '#1a61cO',
+
     // background: 'rgba(0,0,0,.2)',
   },
   card: {

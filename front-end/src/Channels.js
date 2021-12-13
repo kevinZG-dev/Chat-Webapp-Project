@@ -8,12 +8,14 @@ import { Link as RouterLink } from 'react-router-dom';
 // Local
 import Context from './Context'
 import {useNavigate} from 'react-router-dom'
-
+import { Button, MenuList, Divider, MenuItem } from '@mui/material'
+import { width } from '@mui/system';
 const styles = {
   root: {
     '& a': {
       padding: '.2rem .5rem',
       whiteSpace: 'nowrap', 
+      
     }
   },
 }
@@ -43,18 +45,25 @@ export default function Channels() {
     <ul css={styles.root}>
       <li css={styles.channel}>
         <Link to="/channels" component={RouterLink}>Welcome</Link>
+        
       </li>
       { channels.map( (channel, i) => (
         <li key={i} css={styles.channel}>
-          <Link
-            href={`/channels/${channel.id}`}
+
+          <Button
+          sx={{
+            margin: 1,
+            width: "170px",
+            textAlign: "left"
+          }} 
+          variant="contained"
             onClick={ (e) => {
               e.preventDefault()
               naviate(`/channels/${channel.id}`)
             }}
           >
             {channel.name}
-          </Link>
+          </Button>
         </li>
       ))}
     </ul>
