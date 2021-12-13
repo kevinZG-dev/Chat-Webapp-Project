@@ -4,8 +4,12 @@
 const styles = {
   footer: {
     height: '30px',
-    backgroundColor: 'rgba(255,255,255,.3)',
+    backgroundColor: '#1652a1',
     flexShrink: 0,
+    borderTop: 'solid',
+    borderTopColor: 'white',
+    borderTopWidth: '1px' 
+
   },
 }
 
