@@ -33,9 +33,10 @@ const sha256 = (buffer) => {
 
 const useStyles = (theme) => ({
   root: {
+
     flex: '1 1 auto',
     flexDirection: "column",
-    background: theme.palette.background.default,
+    
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -44,7 +45,9 @@ const useStyles = (theme) => ({
       marginLeft: 'auto',
       marginRight: 'auto',
     },
-    backgroundColor: "#3f86e5",
+    background: 'linear-gradient(to bottom, #103c76, #380036 )',
+    width: '100%',
+    height: '100vh',
     '& fieldset': {
       border: 'none',
       '& label': {

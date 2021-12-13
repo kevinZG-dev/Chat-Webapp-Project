@@ -44,7 +44,17 @@ export default function Channels() {
   return (
     <ul css={styles.root}>
       <li css={styles.channel}>
-        <Link to="/channels" component={RouterLink}>Welcome</Link>
+        <Link to="/channels" component={RouterLink}>
+          <Button sx={{
+            
+            width: "170px",
+            textAlign: "left"
+          }}
+          variant="outlined">Menu</Button>
+        </Link>
+        <Divider sx={{
+          marginTop: 1
+        }}/>
         
       </li>
       { channels.map( (channel, i) => (

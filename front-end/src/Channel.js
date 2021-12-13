@@ -20,7 +20,7 @@ const useStyles = (theme) => ({
     flexDirection: 'column',
     position: 'relative',
     overflowX: 'auto',
-    backgroundColor: '#466497',
+    background: 'linear-gradient(to bottom, #103c76, #380036 )',
   },
   fab: {
     position: 'absolute !important',

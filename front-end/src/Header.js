@@ -7,39 +7,36 @@ import { IconButton, Link } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Context from './Context';
 import Button from '@mui/material/Button';
-
+import logoBlanc from './icons/logo-blanc.png'
 
 const useStyles = (theme) => ({
   header: {
-
+    display: 'flex',
     height: "70px",
-
+    alignItems: 'center',
     backgroundColor: '#103c76',
     flexShrink: 0,
-    outline: 'none',
-    border: 'none',
-    margin: 8,
+    margin: "8px",
     boxShadow: '3px 3px 3px #0B2951'
-
   },
-  logoNom: {
-    marginLeft: "50px",
-    height: "30px",
-    width: "120px"
-
-
+  logoimg: {
+    alignItems: 'center',
+    paddingLeft: '50px',
+    maxWidth: 30
   },
-  nom: {
-    marginLeft: 22
+  logo: {
+    paddingLeft: '10px',
+    flexGrow: '1',
+    margin: 0,
+    display: 'block',
   },
+
   content: {
-    position: "absolute",
-    right: "50px",
-    top: "15px",
-    padding: "5px",
-    fontSize: "21px",
-
-
+    display: 'inline-flex',
+    paddingRight: '50px',
+    zIndex: 0,
+    alignItems: 'center',
+    fontSize: "19px",
   },
   headerLogIn: {
     backgroundColor: 'red',
@@ -77,10 +74,9 @@ export default function Header({
   }
   return (
     <header css={styles.header}>
-      <div css={styles.logoNom}>
-        <h1 css={styles.nom}>Blabla</h1>
-      </div>
-    
+      <img css={styles.logoimg} src={logoBlanc} alt="Logo" />
+      <h1 css={styles.logo}>Blabla</h1>
+
       <IconButton
         color="inherit"
         aria-label="open drawer"
@@ -102,6 +98,7 @@ export default function Header({
           :
           <span css={styles.content}>new user</span>
       }
+
 
     </header>
   );
