@@ -14,6 +14,9 @@ import {
   useNavigate
 } from "react-router-dom";
 
+import Button from '@mui/material/Button'
+
+
 const base64URLEncode = (str) => {
   return str.toString('base64')
     .replace(/\+/g, '-')
@@ -31,6 +34,7 @@ const sha256 = (buffer) => {
 const useStyles = (theme) => ({
   root: {
     flex: '1 1 auto',
+    flexDirection: "column",
     background: theme.palette.background.default,
     display: 'flex',
     justifyContent: 'center',
@@ -40,6 +44,7 @@ const useStyles = (theme) => ({
       marginLeft: 'auto',
       marginRight: 'auto',
     },
+    backgroundColor: "#3f86e5",
     '& fieldset': {
       border: 'none',
       '& label': {
@@ -48,6 +53,12 @@ const useStyles = (theme) => ({
       },
     },
   },
+  suppr: {
+    margin: 3,
+    fontSize: "40px"
+  }
+
+
 })
 
 const Redirect = ({
@@ -70,20 +81,36 @@ const Redirect = ({
     window.location = url
   }
   return (
+  
     <div css={styles.root}>
-      <Link onClick={redirect} color="secondary">Login with OpenID Connect and OAuth2</Link>
+      <h1 css={styles.suppr}>Blablate</h1>
+      <h1 css={styles.suppr}>with your friends!</h1>
+      <h3>The best messaging app to chat easily with all your friends</h3>
+      <Button sx={{
+     
+        color: "#344dff",
+        backgroundColor: "#f1f1f1",
+        width: 150,
+        height: 50,
+        fontSize: 19,
+        borderRadius: 20
+      }}
+        onClick={redirect} variant='contained'>Login</Button>
+
     </div>
+  
   )
+
 }
 
 const Tokens = ({
   oauth
 }) => {
-  const {setOauth} = useContext(Context)
+  const { setOauth } = useContext(Context)
   const styles = useStyles(useTheme())
-  const {id_token} = oauth
+  const { id_token } = oauth
   const id_payload = id_token.split('.')[1]
-  const {email} = JSON.parse(atob(id_payload))
+  const { email } = JSON.parse(atob(id_payload))
   const logout = (e) => {
     e.stopPropagation()
     setOauth(null)
@@ -104,22 +131,23 @@ const LoadToken = ({
 }) => {
   const styles = useStyles(useTheme())
   const navigate = useNavigate();
-  useEffect( () => {
+  useEffect(() => {
     const fetch = async () => {
       try {
-        const {data} = await axios.post(
+        const { data } = await axios.post(
           config.token_endpoint
-        , qs.stringify ({
-          grant_type: 'authorization_code',
-          client_id: `${config.client_id}`,
-          code_verifier: `${codeVerifier}`,
-          redirect_uri: `${config.redirect_uri}`,
-          code: `${code}`,
-        }))
+          , qs.stringify({
+            grant_type: 'authorization_code',
+            client_id: `${config.client_id}`,
+            code_verifier: `${codeVerifier}`,
+            redirect_uri: `${config.redirect_uri}`,
+            code: `${code}`,
+          }))
+        console.log(data)
         removeCookie('code_verifier')
         setOauth(data)
         navigate('/')
-      }catch (err) {
+      } catch (err) {
         console.error(err)
       }
     }
@@ -136,7 +164,7 @@ export default function Login({
   const styles = useStyles(useTheme());
   // const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies([]);
-  const {oauth, setOauth} = useContext(Context)
+  const { oauth, setOauth } = useContext(Context)
   const config = {
     authorization_endpoint: 'http://localhost:5556/dex/auth',
     token_endpoint: 'http://localhost:5556/dex/token',
@@ -147,20 +175,20 @@ export default function Login({
   const params = new URLSearchParams(window.location.search)
   const code = params.get('code')
   // is there a code query parameters in the url 
-  if(!code){ // no: we are not being redirected from an oauth server
-    if(!oauth){
+  if (!code) { // no: we are not being redirected from an oauth server
+    if (!oauth) {
       const codeVerifier = base64URLEncode(crypto.randomBytes(32))
       console.log('set code_verifier', codeVerifier)
       setCookie('code_verifier', codeVerifier)
       return (
         <Redirect codeVerifier={codeVerifier} config={config} css={styles.root} />
       )
-    }else{ // yes: user is already logged in, great, is is working
+    } else { // yes: user is already logged in, great, is is working
       return (
         <Tokens oauth={oauth} css={styles.root} />
       )
     }
-  }else{ // yes: we are coming from an oauth server
+  } else { // yes: we are coming from an oauth server
     console.log('get code_verifier', cookies.code_verifier)
     return (
       <LoadToken
