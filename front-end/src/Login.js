@@ -36,7 +36,7 @@ const useStyles = (theme) => ({
 
     flex: '1 1 auto',
     flexDirection: "column",
-    
+
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -84,13 +84,13 @@ const Redirect = ({
     window.location = url
   }
   return (
-  
+
     <div css={styles.root}>
       <h1 css={styles.suppr}>Blablate</h1>
       <h1 css={styles.suppr}>with your friends!</h1>
       <h3>The best messaging app to chat easily with all your friends</h3>
       <Button sx={{
-     
+
         color: "#344dff",
         backgroundColor: "#f1f1f1",
         width: 150,
@@ -101,7 +101,7 @@ const Redirect = ({
         onClick={redirect} variant='contained'>Login</Button>
 
     </div>
-  
+
   )
 
 }
@@ -132,6 +132,7 @@ const LoadToken = ({
   removeCookie,
   setOauth
 }) => {
+  const { oauth } = useContext(Context)
   const styles = useStyles(useTheme())
   const navigate = useNavigate();
   useEffect(() => {
@@ -149,6 +150,34 @@ const LoadToken = ({
         console.log(data)
         removeCookie('code_verifier')
         setOauth(data)
+
+        try { //Add user in db if doesn't exist
+          const { data: users } = await axios.get(`http://localhost:3001/users`, {
+            headers: {
+              'Authorization': `Bearer ${data.access_token}`
+            },
+          });
+          console.log(users);
+          
+          if (users.some(user => user.username === data.email)) {
+            console.log("User already in db");
+          } else {
+            console.log('test3');
+            await axios.post(`http://localhost:3001/users`, {
+              username: data.email,
+            },
+              {
+                headers: {
+                  'Authorization': `Bearer ${data.access_token}`
+                }
+              });
+          }
+        } catch (err) {
+          console.error(
+            "Error to check users in db or adding in" + err
+          );
+        }
+
         navigate('/')
       } catch (err) {
         console.error(err)
