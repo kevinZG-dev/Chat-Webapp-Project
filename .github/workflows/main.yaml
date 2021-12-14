@@ -27,10 +27,13 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
     - uses: actions/checkout@v2
+    - run: npm install
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
     - run: npm ci
     - run: npm test
   # CD part
@@ -45,4 +48,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "webtech-project-attal-zheng" # Must be unique in Heroku
           heroku_email: "maxime.attal@edu.ece.fr" # Heroku account email
-          appdir: userapi # Define appdir if you application is in a subfolder
+          appdir: back-end # Define appdir if you application is in a subfolder
