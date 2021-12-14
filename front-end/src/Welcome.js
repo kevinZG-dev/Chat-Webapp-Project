@@ -2,10 +2,12 @@
 /** @jsxImportSource @emotion/react */
 // Layout
 import { useTheme } from '@mui/styles';
-import { Grid, Typography } from '@mui/material';
+import { Grid, setRef, Typography, Button } from '@mui/material';
 import { ReactComponent as ChannelIcon } from './icons/channel.svg';
 import { ReactComponent as FriendsIcon } from './icons/friends.svg';
 import { ReactComponent as SettingsIcon } from './icons/settings.svg';
+import { ChannelPopup } from './Popup';
+import { useState } from 'react';
 
 const useStyles = (theme) => ({
   root: {
@@ -20,13 +22,21 @@ const useStyles = (theme) => ({
     textAlign: 'center',
   },
   icon: {
-    width: '30%',
+    width: '100%',
     fill: '#fff',
-  }
+  },
 })
 
 export default function Welcome() {
   const styles = useStyles(useTheme())
+  const [toggleCreateChannels, setToggleCreateChannels] = useState(false)
+  const handleOpenCreateChannels = () => {
+    setToggleCreateChannels(true)
+    
+  }
+  const handleCloseCreateChannels = () => {
+    setToggleCreateChannels(false)
+  }
   return (
     <div css={styles.root}>
       <Grid
@@ -38,10 +48,12 @@ export default function Welcome() {
       >
         <Grid item xs>
           <div css={styles.card}>
-            <ChannelIcon css={styles.icon} />
-            <Typography color="textPrimary">
-              Create channels
-            </Typography>
+            <Button>
+              <ChannelIcon onClick={handleOpenCreateChannels} css={styles.icon} />
+            </Button>
+              <Typography color="textPrimary">
+                Create channels
+              </Typography>
           </div>
         </Grid>
         <Grid item xs>
@@ -61,6 +73,10 @@ export default function Welcome() {
           </div>
         </Grid>
       </Grid>
+      <ChannelPopup 
+        open={toggleCreateChannels}
+        onClose={handleCloseCreateChannels}
+      />
     </div>
   );
 }

@@ -15,6 +15,7 @@ const useStyles = (theme) => {
       borderTop: `2px solid ${borderColor}`,
       padding: '.5rem',
       display: 'flex',
+      alignItems: 'center'
     },
     content: {
       flex: '1 1 auto',
@@ -23,11 +24,13 @@ const useStyles = (theme) => {
       },
     },
     send: {
+      
     },
   }
 }
 
 export default function Form({
+  scrollDown,
   addMessage,
   channel,
 }) {
@@ -42,6 +45,7 @@ export default function Form({
     })
     addMessage(message)
     setContent('')
+    scrollDown()
   }
   const handleChange = (e) => {
     setContent(e.target.value)

@@ -80,7 +80,7 @@ export default function Channel() {
         onScrollDown={onScrollDown}
         ref={listRef}
       />
-      <Form addMessage={addMessage} channel={channel} />
+      <Form scrollDown={onClickScroll} addMessage={addMessage} channel={channel} />
       <Fab
         color="primary"
         aria-label="Latest messages"

@@ -64,7 +64,12 @@ export default function Channels() {
           sx={{
             margin: 1,
             width: "170px",
-            textAlign: "left"
+            textAlign: "left",
+            
+            '&:hover': {
+              color: '#f1f1f1',
+              backgroundColor: '#380036',
+            }
           }} 
           variant="contained"
             onClick={ (e) => {
