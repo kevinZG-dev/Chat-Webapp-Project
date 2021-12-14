@@ -11,9 +11,12 @@ const useStyles = (theme) => {
     paperChannel: {
       background: 'linear-gradient(to bottom, #103c76, #380036 )',
       textAlign: "center",
-      border: "1px solid white", 
+      border: "1px solid white",
       padding: '20px',
     },
+    box: {
+      margin: '10px'
+    }
   }
 }
 export const ChannelPopup = (props) => {
@@ -24,7 +27,33 @@ export const ChannelPopup = (props) => {
   const handleClose = () => {
     onClose()
   }
-  const handleSubmit = () => {
+  const handleChange = (e) => {
+    setChannelName(e.target.value)
+    console.log(channelName);
+  }
+  const handleSubmit = async (e) => {
+    if (channelName !== '') {
+      e.preventDefault()
+      await axios.post('http://localhost:3001/channels/', {
+        name: `${channelName}`
+      }, {
+        headers: {
+          'Authorization': `Bearer ${oauth.access_token}`
+        }
+      })
+      try {
+        const { data: channels } = await axios.get('http://localhost:3001/channels', {
+          headers: {
+            'Authorization': `Bearer ${oauth.access_token}`
+          }
+        })
+        setChannels(channels)
+      } catch (err) {
+        console.error(err)
+      }
+      setChannelName('')
+    }
+    handleClose()
 
   }
   return (
@@ -33,16 +62,18 @@ export const ChannelPopup = (props) => {
 
         <DialogTitle>Create new channel</DialogTitle>
         <form autoComplete='off' onSubmit={handleSubmit} >
-          <Box>
+          <Box sx={styles.box}>
             <TextField
               id="custom-css-outlined-input"
               label="Channel's name"
               variant="outlined"
-              css={styles.content}>
-              onChange={event => setChannelName(event.target.value)}
+              css={styles.content}
+              value={channelName}
+              onChange={handleChange}
+            >
             </TextField>
           </Box>
-          <Box>
+          <Box sx={styles.box}>
             <Button type="submit">
               Validate
             </Button>
