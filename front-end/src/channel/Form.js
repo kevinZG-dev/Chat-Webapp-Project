@@ -6,7 +6,8 @@ import axios from 'axios';
 import { Button, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useTheme } from '@mui/styles';
-
+import { useContext } from 'react';
+import Context from '../Context';
 const useStyles = (theme) => {
   // See https://github.com/mui-org/material-ui/blob/next/packages/material-ui/src/OutlinedInput/OutlinedInput.js
   const borderColor = theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)';
@@ -22,7 +23,11 @@ const useStyles = (theme) => {
         marginRight: theme.spacing(1),
       },
     },
+<<<<<<< Updated upstream
     send: {
+=======
+    send: {  
+>>>>>>> Stashed changes
     },
   }
 }
@@ -32,13 +37,14 @@ export default function Form({
   channel,
 }) {
   const [content, setContent] = useState('')
+  const { oauth } = useContext(Context)
   const styles = useStyles(useTheme())
   const onSubmit = async () => {
     const {data: message} = await axios.post(
       `http://localhost:3001/channels/${channel.id}/messages`
     , {
       content: content,
-      author: 'david',
+      author: `${oauth.email}`,
     })
     addMessage(message)
     setContent('')

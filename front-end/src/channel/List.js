@@ -1,6 +1,6 @@
 
 /** @jsxImportSource @emotion/react */
-import {forwardRef, useImperativeHandle, useLayoutEffect, useRef} from 'react'
+import { forwardRef, useImperativeHandle, useLayoutEffect, useRef } from 'react'
 // Layout
 import { useTheme } from '@mui/styles';
 // Markdown
@@ -68,13 +68,13 @@ export default forwardRef(({
   }
   // See https://dev.to/n8tb1t/tracking-scroll-position-with-react-hooks-3bbj
   const throttleTimeout = useRef(null) // react-hooks/exhaustive-deps
-  useLayoutEffect( () => {
+  useLayoutEffect(() => {
     const rootNode = rootEl.current // react-hooks/exhaustive-deps
     const handleScroll = () => {
       if (throttleTimeout.current === null) {
         throttleTimeout.current = setTimeout(() => {
           throttleTimeout.current = null
-          const {scrollTop, offsetHeight, scrollHeight} = rootNode // react-hooks/exhaustive-deps
+          const { scrollTop, offsetHeight, scrollHeight } = rootNode // react-hooks/exhaustive-deps
           onScrollDown(scrollTop + offsetHeight < scrollHeight)
         }, 200)
       }
@@ -85,25 +85,34 @@ export default forwardRef(({
   })
   return (
     <div css={styles.root} ref={rootEl}>
-      <h1>Messages for {channel.name}</h1>
+      <div>
+        <div css={{
+          marginTop: "20px",
+          marginBottom: "20px"
+        }}>
+          <h1 css={{ margin: 0, marginBottom: '5px'}}>Messages for {channel.name}</h1>
+          <span>created by </span>
+        </div>
+      </div>
+
       <ul>
-        { messages.map( (message, i) => {
-            const {value} = unified()
+        {messages.map((message, i) => {
+          const { value } = unified()
             .use(markdown)
             .use(remark2rehype)
             .use(html)
             .processSync(message.content);
-            return (
-              <li key={i} css={styles.message}>
-                <p>
-                  <span>{message.author}</span>
-                  {' - '}
-                  <span>{dayjs().calendar(message.creation)}</span>
-                </p>
-                <div dangerouslySetInnerHTML={{__html: value}}>
-                </div>
-              </li>
-            )
+          return (
+            <li key={i} css={styles.message}>
+              <p>
+                <span>{message.author}</span>
+                {' - '}
+                <span>{dayjs().calendar(message.creation)}</span>
+              </p>
+              <div dangerouslySetInnerHTML={{ __html: value }}>
+              </div>
+            </li>
+          )
         })}
       </ul>
       <div ref={scrollEl} />
