@@ -64,16 +64,12 @@ export default function Channels() {
           sx={{
             margin: 1,
             width: "170px",
-<<<<<<< Updated upstream
-            textAlign: "left"
-=======
             textAlign: "left",
             textTransform: "none",
             '&:hover': {
               color: '#f1f1f1',
               backgroundColor: '#380036',
             }
->>>>>>> Stashed changes
           }} 
           variant="contained"
             onClick={ (e) => {

@@ -23,11 +23,7 @@ const useStyles = (theme) => {
         marginRight: theme.spacing(1),
       },
     },
-<<<<<<< Updated upstream
-    send: {
-=======
     send: {  
->>>>>>> Stashed changes
     },
   }
 }
