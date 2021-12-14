@@ -14,8 +14,8 @@ const styles = {
   root: {
     '& a': {
       padding: '.2rem .5rem',
-      whiteSpace: 'nowrap', 
-      
+      whiteSpace: 'nowrap',
+
     }
   },
 }
@@ -40,13 +40,14 @@ export default function Channels() {
       }
     }
     fetch()
+
   }, [oauth, setChannels])
   return (
     <ul css={styles.root}>
       <li css={styles.channel}>
         <Link to="/channels" component={RouterLink}>
           <Button sx={{
-            
+
             width: "170px",
             textAlign: "left"
           }}
@@ -55,7 +56,7 @@ export default function Channels() {
         <Divider sx={{
           marginTop: 1
         }}/>
-        
+
       </li>
       { channels.map( (channel, i) => (
         <li key={i} css={styles.channel}>
@@ -70,7 +71,7 @@ export default function Channels() {
               color: '#f1f1f1',
               backgroundColor: '#380036',
             }
-          }} 
+          }}
           variant="contained"
             onClick={ (e) => {
               e.preventDefault()

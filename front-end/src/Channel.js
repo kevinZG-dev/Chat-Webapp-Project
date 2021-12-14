@@ -47,9 +47,9 @@ export default function Channel() {
   useEffect( () => {
     const fetch = async () => {
       try{
-        const {data: messages} = await axios.get(`http://localhost:3001/channels/${id}/messages`, {
+        const { data: messages } = await axios.get(`http://localhost:3001/channels/${id}/messages`, {
           headers: {
-            // TODO: secure the request
+            'Authorization': `Bearer ${oauth.access_token}`
           }
         })
         setMessages(messages)
@@ -80,7 +80,7 @@ export default function Channel() {
         onScrollDown={onScrollDown}
         ref={listRef}
       />
-      <Form addMessage={addMessage} channel={channel} />
+      <Form scrollDown={onClickScroll} addMessage={addMessage} channel={channel} />
       <Fab
         color="primary"
         aria-label="Latest messages"
