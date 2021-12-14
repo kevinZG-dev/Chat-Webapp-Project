@@ -132,7 +132,7 @@ const LoadToken = ({
   removeCookie,
   setOauth
 }) => {
-  const { oauth } = useContext(Context)
+  const { oauth, user, setUser } = useContext(Context)
   const styles = useStyles(useTheme())
   const navigate = useNavigate();
   useEffect(() => {
@@ -151,19 +151,21 @@ const LoadToken = ({
         removeCookie('code_verifier')
         setOauth(data)
 
-        try { //Add user in db if doesn't exist
+        try { 
           const { data: users } = await axios.get(`http://localhost:3001/users`, {
             headers: {
               'Authorization': `Bearer ${data.access_token}`
             },
           });
-          console.log(users);
-          
           if (users.some(user => user.username === data.email)) {
-            console.log("User already in db");
+            for (const user of users ) {
+              if(user.username === data.email) {
+                setUser(user)
+                console.log(user)
+              }
+            }
           } else {
-            console.log('test3');
-            await axios.post(`http://localhost:3001/users`, {
+            const user = await axios.post(`http://localhost:3001/users`, {
               username: data.email,
             },
               {
@@ -171,10 +173,12 @@ const LoadToken = ({
                   'Authorization': `Bearer ${data.access_token}`
                 }
               });
+            setUser(user.data)
           }
+
         } catch (err) {
           console.error(
-            "Error to check users in db or adding in" + err
+            "Error to check users in db or adding in"
           );
         }
 
