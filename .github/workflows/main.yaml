@@ -1,0 +1,50 @@
+name: Main CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # CI part
+  test:
+    runs-on: ubuntu-latest
+    # Define `working-directory` if you application is in a subfolder
+    defaults:
+      run:
+        working-directory: back-end
+    services:
+      # Label used to access the service container
+      dex:
+        # Docker Hub image
+        image: dexidp/dex
+        ports:
+          - 3000:3000
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
+    - run: npm ci
+    - run: npm test
+  # CD part
+  deploy:
+    needs: test # Requires CI part to be succesfully completed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Read instructions how to configure this action: https://github.com/marketplace/actions/deploy-to-heroku#getting-started
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "webtech-project-attal-zheng" # Must be unique in Heroku
+          heroku_email: "maxime.attal@edu.ece.fr" # Heroku account email
+          appdir: userapi # Define appdir if you application is in a subfolder
