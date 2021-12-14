@@ -11,6 +11,7 @@ export const Provider = ({
 }) => {
   const [cookies, setCookie, removeCookie] = useCookies([])
   const [oauth, setOauth] = useState(cookies.oauth)
+  const [user, setUser] = useState({})
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [channels, setChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState(null)
@@ -33,6 +34,8 @@ export const Provider = ({
         }
         setOauth(oauth)
       },
+      user: user,
+      setUser: setUser,
       channels: channels,
       drawerVisible: drawerVisible,
       setDrawerVisible: setDrawerVisible,
