@@ -187,7 +187,6 @@ const LoadToken = ({
         console.error(err)
       }
     }
-    console.log(user);
     fetch()
   })
   return (
