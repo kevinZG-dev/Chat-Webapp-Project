@@ -41,10 +41,11 @@ module.exports = {
       await db.put(`channels:${channel.id}`, JSON.stringify(channel));
       return merge(channel, { id: channel.id });
     },
-    delete: (id, channel) => {
-      const original = store.channels[id]
-      if(!original) throw Error('Unregistered channel id')
-      delete store.channels[id]
+    delete: async (id, channel) => {
+      if (!channel.id) throw Error("Invalid channel");
+      await db.del(`channels:${channel.id}`, (err) => {
+        if (err) console.log(err);
+      });
     }
   },
   messages: {
