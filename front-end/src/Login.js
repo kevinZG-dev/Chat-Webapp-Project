@@ -147,7 +147,7 @@ const LoadToken = ({
             redirect_uri: `${config.redirect_uri}`,
             code: `${code}`,
           }))
-        console.log(data)
+        //console.log(data)
         removeCookie('code_verifier')
         setOauth(data)
 
@@ -158,14 +158,14 @@ const LoadToken = ({
             },
           });
           if (users.some(user => user.username === data.email)) {
-            for (const user of users ) {
-              if(user.username === data.email) {
-                setUser(user)
-                console.log(user)
+            for (const currentUser of users ) {
+              if (currentUser.username === data.email) {
+                setUser(currentUser)
+                
               }
             }
           } else {
-            const user = await axios.post(`http://localhost:3001/users`, {
+            const currentUser = await axios.post(`http://localhost:3001/users`, {
               username: data.email,
             },
               {
@@ -173,7 +173,7 @@ const LoadToken = ({
                   'Authorization': `Bearer ${data.access_token}`
                 }
               });
-            setUser(user.data)
+            setUser(currentUser.data)
           }
 
         } catch (err) {
@@ -187,6 +187,7 @@ const LoadToken = ({
         console.error(err)
       }
     }
+    console.log(user);
     fetch()
   })
   return (
