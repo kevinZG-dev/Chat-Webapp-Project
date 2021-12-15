@@ -130,7 +130,7 @@ export default forwardRef(({
         fontSize: "13px",
         color: "#BFC7D7",
         marginBottom: "50px"
-      }}>created by {channel.creator}</span>
+      }}>Created by {channel.creator} / Users: {channel.listOfUsers}</span>
       <ul>
         {messages.map((message, i) => {
           const { value } = unified()
@@ -156,9 +156,9 @@ export default forwardRef(({
         onClose={handleCloseAddUser}
         open={toggleAddUser}
         channel={channel}
-      >
+      />
 
-      </AddUserPopup>
+ 
     </div>
   )
 })
