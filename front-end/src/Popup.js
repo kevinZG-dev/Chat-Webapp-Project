@@ -6,7 +6,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import axios from 'axios';
 import Context from './Context'
-
+import { useNavigate } from 'react-router-dom';
 const useStyles = (theme) => {
 
   return {
@@ -31,18 +31,15 @@ export const ChannelPopup = (props) => {
   }
   const handleChange = (e) => {
     setChannelName(e.target.value)
-    console.log(channelName);
   }
-
   const handleSubmit = async (e) => {
     if (channelName !== '') {
       e.preventDefault()
-      
       await axios.post('http://localhost:3001/channels/', {
         name: `${channelName}`,
-        creator: `${user.username}`,
-        idCreator: `${user.id}`,
-        
+        creator: `${oauth.email}`,
+        listOfUsers: `${oauth.email.split()}`
+
       }, {
         headers: {
           'Authorization': `Bearer ${oauth.access_token}`
@@ -93,33 +90,54 @@ export const ChannelPopup = (props) => {
 }
 
 export const AddUserPopup = (props) => {
-  const { user } = useContext(Context)
+  const { oauth, setChannels, currentChannel } = useContext(Context)
   const { onClose, open, channel } = props
   const [nameUser, setNameUser] = useState([])
   const styles = useStyles(useTheme())
+  const navigate = useNavigate();
+
   const handleClose = () => {
     onClose()
   }
   const handleChange = (e) => {
-    setNameUser([e.target.value])
+    setNameUser(e.target.value)
+    console.log(nameUser);
   }
+  //console.log(currentChannel);
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
-    let listOfUsers = (channel.list).concat(nameUser)
+    console.log((channel.listOfUsers.split()).concat(nameUser));
+    let listOfUsers = (channel.listOfUsers.split()).concat(nameUser)
+    console.log(listOfUsers);
 
-    // if (nameUser !== '') {
-    //   try {
-    //     await axios.put(`http://localhost:3001/channels/${channel.id}`, {
-    //       name: `${channel.name}`,
-    //       creator: `${channel.creator}`,
-    //       idCreator: `${channel.idCreator}`,
-    //       listUsers: `$`
-    //     })
-    //   } catch (error) {
-        
-    //   }
-    // }
+ 
+    await axios.put(`http://localhost:3001/channels/${channel.id}`, {
+      name: `${channel.name}`,
+      creator: `${oauth.email}`,
+      listOfUsers: `${listOfUsers}`,
+      id: `${channel.id}`
+    }, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
+    })
+    console.log(channel.id);
+    try {
+      const { data: channels } = await axios.get('http://localhost:3001/channels/', {
+        headers: {
+          'Authorization': `Bearer ${oauth.access_token}`
+        }
+      })
+      console.log('rtetes');
+      setChannels(channels)
+      console.log(channels);
+      //navigate(`/channels/${channel.id}`)
+    } catch (err) {
+      console.error(err)
+    }
+    setNameUser('')
+
+    handleClose()
   }
   return (
     <Dialog onClose={handleClose} open={open}>
