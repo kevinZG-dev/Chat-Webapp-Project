@@ -10,6 +10,7 @@ import Context from './Context'
 import {useNavigate} from 'react-router-dom'
 import { Button, MenuList, Divider, MenuItem } from '@mui/material'
 import { width } from '@mui/system';
+import Login from './Login';
 const styles = {
   root: {
     '& a': {
@@ -23,7 +24,7 @@ const styles = {
 export default function Channels() {
   const {
     oauth,
-    channels, setChannels
+    channels, setChannels, setCurrentChannel
   } = useContext(Context)
   const naviate = useNavigate();
   useEffect( () => {
@@ -76,6 +77,8 @@ export default function Channels() {
             onClick={ (e) => {
               e.preventDefault()
               naviate(`/channels/${channel.id}`)
+              setCurrentChannel(`${channel.id}`)
+              
             }}
           >
             {channel.name}
