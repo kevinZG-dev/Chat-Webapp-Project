@@ -5,6 +5,7 @@ import { forwardRef, useContext, useImperativeHandle, useLayoutEffect, useRef } 
 import { useTheme } from '@mui/styles';
 import { IconButton } from '@mui/material';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Tooltip } from '@mui/material';
 // Markdown
 import { unified } from 'unified'
@@ -18,7 +19,7 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import axios from 'axios';
 import Context from '../Context';
 import { useState } from 'react'
-import { AddUserPopup } from '../Popup'
+import { AddUserPopup, DeleteChannelPopup } from '../Popup'
 dayjs.extend(calendar)
 dayjs.extend(updateLocale)
 dayjs.updateLocale('en', {
@@ -70,6 +71,7 @@ export default forwardRef(({
 }, ref) => {
   const styles = useStyles(useTheme())
   const [toggleAddUser, setToggleAddUser] = useState(false)
+  const [toggleDeleteChannel, setToggleDeleteChannel] = useState(false)
   // Expose the `scroll` action
   useImperativeHandle(ref, () => ({
     scroll: scroll
@@ -103,7 +105,12 @@ export default forwardRef(({
   const handleCloseAddUser = () => {
     setToggleAddUser(false)
   }
-
+  const handleOpenDeleteChannel = () => {
+    setToggleDeleteChannel(true)
+  }
+  const handleCloseDeleteChannel = () => {
+    setToggleDeleteChannel(false)
+  }
   return (
     <div css={styles.root} ref={rootEl}>
       <div css={styles.bar}>
@@ -123,6 +130,15 @@ export default forwardRef(({
             <GroupAddIcon />
           </IconButton>
         </Tooltip>
+        <Tooltip title="Delete channel">
+          <IconButton
+            aria-label="Delete channel"
+            onClick={handleOpenDeleteChannel}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+
 
       </div>
       <span css={{
@@ -152,11 +168,17 @@ export default forwardRef(({
         })}
       </ul>
       <div ref={scrollEl} />
+      <DeleteChannelPopup 
+        onClose={handleCloseDeleteChannel}
+        open={toggleDeleteChannel}
+        channel={channel}
+      />
       <AddUserPopup
         onClose={handleCloseAddUser}
         open={toggleAddUser}
         channel={channel}
       />
+      
 
  
     </div>

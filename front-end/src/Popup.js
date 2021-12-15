@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Button, Dialog, DialogTitle, TextField, Box, Paper } from '@mui/material'
+import { Button, Dialog, DialogTitle, TextField, Box, Paper, DialogContent, DialogContentText, DialogActions } from '@mui/material'
 import { useContext } from 'react'
 import { useTheme } from '@mui/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import Context from './Context'
 import { useNavigate } from 'react-router-dom';
@@ -110,7 +111,7 @@ export const AddUserPopup = (props) => {
     let listOfUsers = (channel.listOfUsers.split()).concat(nameUser)
     console.log(listOfUsers);
 
- 
+
     await axios.put(`http://localhost:3001/channels/${channel.id}`, {
       name: `${channel.name}`,
       creator: `${oauth.email}`,
@@ -169,6 +170,41 @@ export const AddUserPopup = (props) => {
             </Button>
           </Box>
         </form>
+      </Paper>
+    </Dialog>
+  )
+}
+
+export const DeleteChannelPopup = (props) => {
+  const { onClose, open, channel } = props
+  const styles = useStyles(useTheme())
+
+  const handleClose = () => {
+    onClose()
+  }
+  const handleSubmit = () => {
+
+  }
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <Paper sx={styles.paperChannel}>
+        <DialogTitle>Are you sure you want to delete the channel: {channel.name}?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description" sx={{ color: "#D3302F" }}>
+            This channel will be deleted for all users!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{justifyContent: "center"}}>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button sx={{
+            color: "red",
+            '&:hover': {
+
+              backgroundColor: '#D3302F',
+            }
+          }}
+            onClick={handleSubmit}>Agree</Button>
+        </DialogActions>
       </Paper>
     </Dialog>
   )
