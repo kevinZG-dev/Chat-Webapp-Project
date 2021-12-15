@@ -1,8 +1,11 @@
 
 /** @jsxImportSource @emotion/react */
-import { forwardRef, useImperativeHandle, useLayoutEffect, useRef } from 'react'
+import { forwardRef, useContext, useImperativeHandle, useLayoutEffect, useRef } from 'react'
 // Layout
 import { useTheme } from '@mui/styles';
+import { IconButton } from '@mui/material';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import { Tooltip } from '@mui/material';
 // Markdown
 import { unified } from 'unified'
 import markdown from 'remark-parse'
@@ -12,6 +15,10 @@ import html from 'rehype-stringify'
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar'
 import updateLocale from 'dayjs/plugin/updateLocale'
+import axios from 'axios';
+import Context from '../Context';
+import { useState } from 'react'
+import { AddUserPopup } from '../Popup'
 dayjs.extend(calendar)
 dayjs.extend(updateLocale)
 dayjs.updateLocale('en', {
@@ -49,6 +56,11 @@ const useStyles = (theme) => ({
     top: 0,
     width: '50px',
   },
+  bar: {
+    display: 'flex',
+    alignItems: 'center',
+
+  }
 })
 
 export default forwardRef(({
@@ -57,6 +69,7 @@ export default forwardRef(({
   onScrollDown,
 }, ref) => {
   const styles = useStyles(useTheme())
+  const [toggleAddUser, setToggleAddUser] = useState(false)
   // Expose the `scroll` action
   useImperativeHandle(ref, () => ({
     scroll: scroll
@@ -79,22 +92,45 @@ export default forwardRef(({
         }, 200)
       }
     }
+
     handleScroll()
     rootNode.addEventListener('scroll', handleScroll)
     return () => rootNode.removeEventListener('scroll', handleScroll)
   })
+  const handleOpenAddUser = () => {
+    setToggleAddUser(true)
+  }
+  const handleCloseAddUser = () => {
+    setToggleAddUser(false)
+  }
+
   return (
     <div css={styles.root} ref={rootEl}>
-      <div>
+      <div css={styles.bar}>
         <div css={{
-          marginTop: "20px",
-          marginBottom: "20px"
+          padding: '.2rem .5rem',
+          marginTop: "10px",
+          marginBottom: "10px"
         }}>
-          <h1 css={{ margin: 0, marginBottom: '5px'}}>Messages for {channel.name}</h1>
-          <span>created by </span>
-        </div>
-      </div>
+          <h1 css={{ margin: 0 }}># {channel.name}</h1>
 
+        </div>
+        <Tooltip title="New user">
+          <IconButton
+            aria-label="New user"
+            onClick={handleOpenAddUser}
+          >
+            <GroupAddIcon />
+          </IconButton>
+        </Tooltip>
+
+      </div>
+      <span css={{
+        padding: '.2rem .5rem',
+        fontSize: "13px",
+        color: "#BFC7D7",
+        marginBottom: "50px"
+      }}>created by {channel.creator}</span>
       <ul>
         {messages.map((message, i) => {
           const { value } = unified()
@@ -116,6 +152,13 @@ export default forwardRef(({
         })}
       </ul>
       <div ref={scrollEl} />
+      <AddUserPopup
+        onClose={handleCloseAddUser}
+        open={toggleAddUser}
+        channel={channel}
+      >
+
+      </AddUserPopup>
     </div>
   )
 })
