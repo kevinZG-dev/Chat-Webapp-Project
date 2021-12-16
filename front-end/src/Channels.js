@@ -33,6 +33,9 @@ export default function Channels() {
         const {data: channels} = await axios.get('http://localhost:3001/channels', {
           headers: {
             'Authorization': `Bearer ${oauth.access_token}`
+          },
+          params: {
+            user: `${oauth.email}`,
           }
         })
         setChannels(channels)
@@ -43,6 +46,7 @@ export default function Channels() {
     fetch()
 
   }, [oauth, setChannels])
+  console.log(channels);
   return (
     <ul css={styles.root}>
       <li css={styles.channel}>

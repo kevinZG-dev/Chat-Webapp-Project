@@ -50,6 +50,9 @@ export const ChannelPopup = (props) => {
         const { data: channels } = await axios.get('http://localhost:3001/channels', {
           headers: {
             'Authorization': `Bearer ${oauth.access_token}`
+          },
+          params: {
+            user: `${oauth.email}`,
           }
         })
         console.log(channels);
@@ -127,6 +130,9 @@ export const AddUserPopup = (props) => {
       const { data: channels } = await axios.get('http://localhost:3001/channels/', {
         headers: {
           'Authorization': `Bearer ${oauth.access_token}`
+        },
+        params: {
+          user: `${oauth.email}`,
         }
       })
       console.log('rtetes');
