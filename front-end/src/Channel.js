@@ -44,6 +44,10 @@ export default function Channel() {
   const addMessage = (message) => {
     setMessages([...messages, message])
   }
+  const deleteMessage = (creation) => {
+    const filteredMessages = messages.filter(message => message.creation !== creation)
+    setMessages(filteredMessages)
+  }
   useEffect( () => {
     const fetch = async () => {
       try{
@@ -75,6 +79,7 @@ export default function Channel() {
   return (
     <div css={styles.root}>
       <List
+        deleteMessage={deleteMessage}
         channel={channel}
         messages={messages}
         onScrollDown={onScrollDown}

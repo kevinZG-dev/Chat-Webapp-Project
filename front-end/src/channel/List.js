@@ -1,6 +1,6 @@
 
 /** @jsxImportSource @emotion/react */
-import { forwardRef, useContext, useImperativeHandle, useLayoutEffect, useRef } from 'react'
+import { forwardRef, useContext, useEffect, useImperativeHandle, useLayoutEffect, useRef } from 'react'
 // Layout
 import { useTheme } from '@mui/styles';
 import { IconButton, Paper } from '@mui/material';
@@ -68,6 +68,7 @@ const useStyles = (theme) => ({
 })
 
 export default forwardRef(({
+  deleteMessage,
   channel,
   messages,
   onScrollDown,
@@ -105,6 +106,7 @@ export default forwardRef(({
     rootNode.addEventListener('scroll', handleScroll)
     return () => rootNode.removeEventListener('scroll', handleScroll)
   })
+
   const handleOpenAddUser = () => {
     setToggleAddUser(true)
   }
@@ -119,11 +121,20 @@ export default forwardRef(({
   }
   const handleOpenAction = (e) => {
     setAnchorEl(e.currentTarget)
-    console.log(e.currentTarget);
   }
-
   const handleCloseAction = () => {
     setAnchorEl(null)
+  }
+  const handleDeleteMessage = async (author, channelId, creation) => {
+    await axios.delete(`http://localhost:3001/channels/${channelId}/messages`, {
+      params: {
+        author: `${author}`,
+        channelId: `${channelId}`,
+        creation: `${creation}`
+      },
+    })
+    deleteMessage(creation)
+    handleCloseAction()
   }
   return (
     <div css={styles.root} ref={rootEl}>
@@ -165,7 +176,7 @@ export default forwardRef(({
           const { value } = unified()
             .use(markdown)
             .use(remark2rehype)
-            .use(html)              
+            .use(html)
             .processSync(message.content);
 
           return (
@@ -177,7 +188,7 @@ export default forwardRef(({
                 <p>
                   <span>{message.author}</span>
                   {' - '}
-                  <span>{dayjs().calendar(message.creation)}</span>
+                  <span>{dayjs(message.creation / 1000).calendar()}</span>
                 </p>
                 {
                   message.author === oauth.email
@@ -204,7 +215,7 @@ export default forwardRef(({
                   <Paper sx={{ background: 'linear-gradient(to bottom, #103c76, #380036 )', }}>
 
                     <MenuItem onClick={handleCloseAction}>Edit</MenuItem>
-                    <MenuItem onClick={handleCloseAction}>Delete</MenuItem>
+                    <MenuItem onClick={() => handleDeleteMessage(message.author, channel.id, message.creation)}>Delete</MenuItem>
 
                   </Paper>
                 </Menu>
@@ -217,7 +228,7 @@ export default forwardRef(({
         })}
       </ul>
       <div ref={scrollEl} />
-      <DeleteChannelPopup 
+      <DeleteChannelPopup
         onClose={handleCloseDeleteChannel}
         open={toggleDeleteChannel}
         channel={channel}
@@ -227,7 +238,7 @@ export default forwardRef(({
         open={toggleAddUser}
         channel={channel}
       />
-      
+
 
 
 

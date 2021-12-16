@@ -67,13 +67,7 @@ const api ={
       }))
       return merge(message, {channelId: channelId, creation: creation})
     },
-    delete: async (author, channelId, creation) => {
-      if(!channelId) throw Error('Invalid channel')
-      const messages = await api.messages.list(channelId)
-      const message = messages.find(message => message.creation === creation)
-      // if(message.author != author) throw Error('Invalid user')   
-      await db.del(`messages:${channelId}:${creation}`)
-    },
+
     list: async (channelId) => {
       return new Promise( (resolve, reject) => {
         const messages = []
@@ -92,6 +86,14 @@ const api ={
           resolve(messages)
         })
       })
+    },
+    delete: async (author, channelId, creation) => {
+      if (!channelId) throw Error('Invalid channel')
+
+      const messages = await api.messages.list(channelId)
+      const message = messages.find(message => message.creation === creation)
+      if(message.author != author) throw Error('Invalid user')   
+      await db.del(`messages:${channelId}:${creation}`)
     },
   },
   users: {
