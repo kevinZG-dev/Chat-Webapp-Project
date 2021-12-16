@@ -48,9 +48,9 @@ module.exports = {
       await db.put(`channels:${channel.id}`, JSON.stringify(channel));
       return merge(channel, { id: channel.id });
     },
-    delete: async (id, channel) => {
-      if (!channel.id) throw Error("Invalid channel");
-      await db.del(`channels:${channel.id}`, (err) => {
+    delete: async (id) => {
+      if (!id) throw Error("Invalid channel");
+      await db.del(`channels:${id}`, (err) => {
         if (err) console.log(err);
       });
     }

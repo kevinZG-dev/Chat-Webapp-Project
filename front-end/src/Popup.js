@@ -110,7 +110,6 @@ export const AddUserPopup = (props) => {
   //console.log(currentChannel);
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log((channel.listOfUsers.split()).concat(nameUser));
     let listOfUsers = (channel.listOfUsers.split()).concat(nameUser)
     console.log(listOfUsers);
 
@@ -183,13 +182,35 @@ export const AddUserPopup = (props) => {
 
 export const DeleteChannelPopup = (props) => {
   const { onClose, open, channel } = props
+  const { oauth, setChannels } = useContext(Context)
   const styles = useStyles(useTheme())
-
+  const navigate = useNavigate();
   const handleClose = () => {
     onClose()
   }
-  const handleSubmit = () => {
-
+  const handleSubmit = async () => {
+    await axios.delete(`http://localhost:3001/channels/${channel.id}`, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      },
+      params: {
+        id: `${channel.id}`
+      }
+    })
+    try {
+      const { data: channels } = await axios.get('http://localhost:3001/channels/', {
+        headers: {
+          'Authorization': `Bearer ${oauth.access_token}`
+        },
+        params: {
+          user: `${oauth.email}`,
+        }
+      })
+      setChannels(channels)
+    } catch (err) {
+      console.error(err)
+    } 
+    navigate('/channels')
   }
   return (
     <Dialog onClose={handleClose} open={open}>
@@ -201,7 +222,7 @@ export const DeleteChannelPopup = (props) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{justifyContent: "center"}}>
-          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose}>Cancel</Button>
           <Button sx={{
             color: "red",
             '&:hover': {
@@ -209,7 +230,7 @@ export const DeleteChannelPopup = (props) => {
               backgroundColor: '#D3302F',
             }
           }}
-            onClick={handleSubmit}>Agree</Button>
+            onClick={handleSubmit}>Delete</Button>
         </DialogActions>
       </Paper>
     </Dialog>
