@@ -3,9 +3,13 @@
 import { forwardRef, useContext, useImperativeHandle, useLayoutEffect, useRef } from 'react'
 // Layout
 import { useTheme } from '@mui/styles';
-import { IconButton } from '@mui/material';
+import { IconButton, Paper } from '@mui/material';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Tooltip } from '@mui/material';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 // Markdown
 import { unified } from 'unified'
 import markdown from 'remark-parse'
@@ -69,7 +73,11 @@ export default forwardRef(({
   onScrollDown,
 }, ref) => {
   const styles = useStyles(useTheme())
+  const { oauth } = useContext(Context)
   const [toggleAddUser, setToggleAddUser] = useState(false)
+  const [toggleDeleteChannel, setToggleDeleteChannel] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
   // Expose the `scroll` action
   useImperativeHandle(ref, () => ({
     scroll: scroll
@@ -103,7 +111,20 @@ export default forwardRef(({
   const handleCloseAddUser = () => {
     setToggleAddUser(false)
   }
+  const handleOpenDeleteChannel = () => {
+    setToggleDeleteChannel(true)
+  }
+  const handleCloseDeleteChannel = () => {
+    setToggleDeleteChannel(false)
+  }
+  const handleOpenAction = (e) => {
+    setAnchorEl(e.currentTarget)
+    console.log(e.currentTarget);
+  }
 
+  const handleCloseAction = () => {
+    setAnchorEl(null)
+  }
   return (
     <div css={styles.root} ref={rootEl}>
       <div css={styles.bar}>
@@ -113,7 +134,6 @@ export default forwardRef(({
           marginBottom: "10px"
         }}>
           <h1 css={{ margin: 0 }}># {channel.name}</h1>
-
         </div>
         <Tooltip title="New user">
           <IconButton
@@ -130,21 +150,57 @@ export default forwardRef(({
         fontSize: "13px",
         color: "#BFC7D7",
         marginBottom: "50px"
-      }}>Created by {channel.creator} / Users: {channel.listOfUsers}</span>
+      }}>Created by {channel.creator} / Users: {channel.listOfUsers.split(',').map(user => user + ' - ')}</span>
       <ul>
         {messages.map((message, i) => {
           const { value } = unified()
             .use(markdown)
             .use(remark2rehype)
-            .use(html)
+            .use(html)              
             .processSync(message.content);
+
           return (
-            <li key={i} css={styles.message}>
-              <p>
-                <span>{message.author}</span>
-                {' - '}
-                <span>{dayjs().calendar(message.creation)}</span>
-              </p>
+            <li
+              key={i}
+              css={styles.message}
+            >
+              <div css={styles.bar}>
+                <p>
+                  <span>{message.author}</span>
+                  {' - '}
+                  <span>{dayjs().calendar(message.creation)}</span>
+                </p>
+                {
+                  message.author === oauth.email
+                  &&
+                  <Tooltip title="Action">
+                    <IconButton
+                      aria-label="Action"
+                      onClick={handleOpenAction}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                  </Tooltip>
+                }
+                <Menu
+
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleCloseAction}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  <Paper sx={{ background: 'linear-gradient(to bottom, #103c76, #380036 )', }}>
+
+                    <MenuItem onClick={handleCloseAction}>Edit</MenuItem>
+                    <MenuItem onClick={handleCloseAction}>Delete</MenuItem>
+
+                  </Paper>
+                </Menu>
+
+              </div>
               <div dangerouslySetInnerHTML={{ __html: value }}>
               </div>
             </li>
@@ -152,13 +208,14 @@ export default forwardRef(({
         })}
       </ul>
       <div ref={scrollEl} />
-      <AddUserPopup
-        onClose={handleCloseAddUser}
-        open={toggleAddUser}
+      <DeleteChannelPopup
+        onClose={handleCloseDeleteChannel}
+        open={toggleDeleteChannel}
         channel={channel}
       />
 
- 
+
+
     </div>
   )
 })

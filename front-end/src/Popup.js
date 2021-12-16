@@ -128,15 +128,11 @@ export const AddUserPopup = (props) => {
           'Authorization': `Bearer ${oauth.access_token}`
         }
       })
-      console.log('rtetes');
       setChannels(channels)
-      console.log(channels);
-      //navigate(`/channels/${channel.id}`)
     } catch (err) {
       console.error(err)
     }
     setNameUser('')
-
     handleClose()
   }
   return (
@@ -169,6 +165,62 @@ export const AddUserPopup = (props) => {
             </Button>
           </Box>
         </form>
+      </Paper>
+    </Dialog>
+  )
+}
+
+export const DeleteChannelPopup = (props) => {
+  const { onClose, open, channel } = props
+  const { oauth, setChannels } = useContext(Context)
+  const styles = useStyles(useTheme())
+  const navigate = useNavigate();
+  const handleClose = () => {
+    onClose()
+  }
+  const handleSubmit = async () => {
+    await axios.delete(`http://localhost:3001/channels/${channel.id}`, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      },
+      params: {
+        id: `${channel.id}`
+      }
+    })
+    try {
+      const { data: channels } = await axios.get('http://localhost:3001/channels/', {
+        headers: {
+          'Authorization': `Bearer ${oauth.access_token}`
+        },
+        params: {
+          user: `${oauth.email}`,
+        }
+      })
+      setChannels(channels)
+    } catch (err) {
+      console.error(err)
+    }
+    navigate('/channels')
+  }
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <Paper sx={styles.paperChannel}>
+        <DialogTitle>Are you sure you want to delete the channel: {channel.name}?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description" sx={{ color: "#D3302F" }}>
+            This channel will be deleted for all users!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center" }}>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button sx={{
+            color: "red",
+            '&:hover': {
+              backgroundColor: '#D3302F',
+            }
+          }}
+            onClick={handleSubmit}>Delete</Button>
+        </DialogActions>
       </Paper>
     </Dialog>
   )
