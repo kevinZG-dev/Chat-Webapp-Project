@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { Button, Dialog, DialogTitle, TextField, Box, Paper } from '@mui/material'
+import { Button, Dialog, DialogTitle, TextField, Box, Paper, DialogContent, DialogContentText, DialogActions } from '@mui/material'
 import { useContext } from 'react'
 import { useTheme } from '@mui/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import Context from './Context'
 import { useNavigate } from 'react-router-dom';
@@ -49,6 +50,9 @@ export const ChannelPopup = (props) => {
         const { data: channels } = await axios.get('http://localhost:3001/channels', {
           headers: {
             'Authorization': `Bearer ${oauth.access_token}`
+          },
+          params: {
+            user: `${oauth.email}`,
           }
         })
         console.log(channels);
@@ -106,11 +110,10 @@ export const AddUserPopup = (props) => {
   //console.log(currentChannel);
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log((channel.listOfUsers.split()).concat(nameUser));
     let listOfUsers = (channel.listOfUsers.split()).concat(nameUser)
     console.log(listOfUsers);
 
- 
+
     await axios.put(`http://localhost:3001/channels/${channel.id}`, {
       name: `${channel.name}`,
       creator: `${oauth.email}`,
@@ -126,6 +129,9 @@ export const AddUserPopup = (props) => {
       const { data: channels } = await axios.get('http://localhost:3001/channels/', {
         headers: {
           'Authorization': `Bearer ${oauth.access_token}`
+        },
+        params: {
+          user: `${oauth.email}`,
         }
       })
       setChannels(channels)
@@ -199,7 +205,7 @@ export const DeleteChannelPopup = (props) => {
       setChannels(channels)
     } catch (err) {
       console.error(err)
-    }
+    } 
     navigate('/channels')
   }
   return (

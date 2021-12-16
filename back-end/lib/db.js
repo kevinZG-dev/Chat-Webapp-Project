@@ -19,7 +19,7 @@ const api ={
       const channel = JSON.parse(data)
       return merge(channel, {id: id})
     },
-    list: async () => {
+    list: async (user) => {
       return new Promise( (resolve, reject) => {
         const channels = []
         db.createReadStream({
@@ -28,7 +28,14 @@ const api ={
         }).on( 'data', ({key, value}) => {
           channel = JSON.parse(value)
           channel.id = key.split(':')[1]
-          channels.push(channel)
+
+          const listOfUsers = channel.listOfUsers.split(',')
+          listOfUsers.forEach(element => {
+            if (element === user) {
+              channels.push(channel)
+            } 
+          });
+          
         }).on( 'error', (err) => {
           reject(err)
         }).on( 'end', () => {
@@ -41,10 +48,11 @@ const api ={
       await db.put(`channels:${channel.id}`, JSON.stringify(channel));
       return merge(channel, { id: channel.id });
     },
-    delete: (id, channel) => {
-      const original = store.channels[id]
-      if(!original) throw Error('Unregistered channel id')
-      delete store.channels[id]
+    delete: async (id) => {
+      if (!id) throw Error("Invalid channel");
+      await db.del(`channels:${id}`, (err) => {
+        if (err) console.log(err);
+      });
     }
   },
   messages: {
