@@ -70,4 +70,21 @@ describe('messages', () => {
     .expect(404)
   })
   
+  it('delete message', async () => {
+    // Create a channel
+    const {body: channel} = await supertest(app)
+    .post('/channels')
+    .send({name: 'channel 1'})
+    // Create a channel
+    const {body: message} = await supertest(app)
+    .post('/channels/${channel.id}/messages')
+    .send({author: 'whoami', content: 'Hello ECE'})
+    await supertest(app).delete('/channels/${channel.id}/messages')
+    .send([message.creation])
+    // Get messages
+    const {body: messages} = await supertest(app)
+    .get(`/channels/${channel.id}/messages`)
+    messages.length.should.eql(0)
+  })
+
 })

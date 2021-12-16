@@ -5,7 +5,7 @@ const microtime = require('microtime')
 const level = require('level')
 const db = level(__dirname + '/../db')
 
-module.exports = {
+const api ={
   channels: {
     create: async (channel) => {
       if(!channel.name) throw Error('Invalid channel')
@@ -67,6 +67,7 @@ module.exports = {
       }))
       return merge(message, {channelId: channelId, creation: creation})
     },
+
     list: async (channelId) => {
       return new Promise( (resolve, reject) => {
         const messages = []
@@ -85,6 +86,14 @@ module.exports = {
           resolve(messages)
         })
       })
+    },
+    delete: async (author, channelId, creation) => {
+      if (!channelId) throw Error('Invalid channel')
+
+      const messages = await api.messages.list(channelId)
+      const message = messages.find(message => message.creation === creation)
+      if(message.author != author) throw Error('Invalid user')   
+      await db.del(`messages:${channelId}:${creation}`)
     },
   },
   users: {
@@ -134,3 +143,5 @@ module.exports = {
     }
   }
 }
+
+module.exports = api

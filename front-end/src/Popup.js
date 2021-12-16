@@ -134,15 +134,11 @@ export const AddUserPopup = (props) => {
           user: `${oauth.email}`,
         }
       })
-      console.log('rtetes');
       setChannels(channels)
-      console.log(channels);
-      //navigate(`/channels/${channel.id}`)
     } catch (err) {
       console.error(err)
     }
     setNameUser('')
-
     handleClose()
   }
   return (
@@ -221,12 +217,11 @@ export const DeleteChannelPopup = (props) => {
             This channel will be deleted for all users!
           </DialogContentText>
         </DialogContent>
-        <DialogActions sx={{justifyContent: "center"}}>
+        <DialogActions sx={{ justifyContent: "center" }}>
           <Button onClick={handleClose}>Cancel</Button>
           <Button sx={{
             color: "red",
             '&:hover': {
-
               backgroundColor: '#D3302F',
             }
           }}
