@@ -26,24 +26,33 @@ export const ChannelPopup = (props) => {
   const styles = useStyles(useTheme())
   const { onClose, open } = props
   const { oauth, channels, setChannels, user } = useContext(Context)
-  const [channelName, setChannelName] = useState("")
+  const [channelName, setChannelName] = useState('')
+  const [usersNames, setUsersNames] = useState('')
   const addChannels = (newChannel) => {
     setChannels([...channels, newChannel])
   }
   const handleClose = () => {
     onClose()
+    setChannelName('')
+    setUsersNames('')
   }
-  const handleChange = (e) => {
+  const handleChangeChannelName = (e) => {
     setChannelName(e.target.value)
+  }
+  const handleChangeAddUsers = (e) => {
+    setUsersNames(e.target.value)
   }
   const handleSubmit = async (e) => {
     if (channelName !== '') {
       e.preventDefault()
-      const email = [oauth.email]
+      const listEmail = [oauth.email]
+      const stringOfListWithoutSpace = usersNames.replace(/\s/g, '')
+      const listOfAddedUsers = stringOfListWithoutSpace.split(',')
+      const finalListEmail = listEmail.concat(listOfAddedUsers)
       const { data: channel } = await axios.post('http://localhost:3001/channels/', {
         name: `${channelName}`,
         creator: `${oauth.email}`,
-        listOfUsers: email
+        listOfUsers: finalListEmail
 
       }, {
         headers: {
@@ -51,7 +60,7 @@ export const ChannelPopup = (props) => {
         }
       })
       addChannels(channel)
-      setChannelName('')
+
     }
     handleClose()
 
@@ -69,12 +78,44 @@ export const ChannelPopup = (props) => {
               variant="outlined"
               css={styles.content}
               value={channelName}
-              onChange={handleChange}
+              onChange={handleChangeChannelName}
             >
             </TextField>
           </Box>
           <Box sx={styles.box}>
-            <Button type="submit">
+            <TextField
+              id="input-with-icon-textfield"
+              label="Add Users"
+              variant="standard"
+              helperText="Enter users emails separate by , "
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
+              css={styles.content}
+              value={usersNames}
+              onChange={handleChangeAddUsers}
+            >
+            </TextField>
+          </Box>
+          <Box sx={styles.box}>
+            <Button sx={{
+              color: "#f1f1f1",
+              '&:hover': {
+                color: '#D3302F',
+              }
+            }}
+              onClick={handleClose}>Cancel</Button>
+            <Button sx={{
+              color: "#f1f1f1",
+              '&:hover': {
+                color: '#7EBEEA',
+              }
+            }}
+              type="submit">
               Validate
             </Button>
           </Box>
@@ -87,7 +128,7 @@ export const ChannelPopup = (props) => {
 export const AddUserPopup = (props) => {
   const { oauth, channels, setChannels, currentChannel } = useContext(Context)
   const { onClose, open, channel } = props
-  const [nameUser, setNameUser] = useState('')
+  const [usersNames, setUsersNames] = useState('')
   const styles = useStyles(useTheme())
   const navigate = useNavigate();
 
@@ -95,8 +136,8 @@ export const AddUserPopup = (props) => {
     onClose()
   }
   const handleChange = (e) => {
-    setNameUser(e.target.value)
- 
+    setUsersNames(e.target.value)
+
   }
   const updateChannels = (channelRet) => {
     const updatedChannels = channels.map(channel => {
@@ -110,14 +151,14 @@ export const AddUserPopup = (props) => {
   }
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const list = channel.listOfUsers.concat([nameUser])
-
-
+    const stringOfListWithoutSpace = usersNames.replace(/\s/g, '')
+    const listOfAddedUsers = stringOfListWithoutSpace.split(',')
+    const finalListEmail = channel.listOfUsers.concat(listOfAddedUsers)
 
     const { data: channelRet } = await axios.put(`http://localhost:3001/channels/${channel.id}`, {
       name: `${channel.name}`,
       creator: `${oauth.email}`,
-      listOfUsers: list,
+      listOfUsers: finalListEmail,
       id: `${channel.id}`
     }, {
       headers: {
@@ -125,19 +166,19 @@ export const AddUserPopup = (props) => {
       }
     })
     updateChannels(channelRet)
-    setNameUser('')
+    setUsersNames('')
     handleClose()
   }
   return (
     <Dialog onClose={handleClose} open={open}>
       <Paper sx={styles.paperChannel}>
 
-        <DialogTitle>Add a new user</DialogTitle>
+        <DialogTitle>Invite Users</DialogTitle>
         <form autoComplete='off' onSubmit={handleSubmit} >
           <Box sx={styles.box}>
             <TextField
               id="input-with-icon-textfield"
-              label="User name"
+              label="Add Users"
               variant="standard"
               InputProps={{
                 startAdornment: (
@@ -146,14 +187,28 @@ export const AddUserPopup = (props) => {
                   </InputAdornment>
                 ),
               }}
+              helperText="Enter users emails separate by , "
               css={styles.content}
-              value={nameUser}
+              value={usersNames}
               onChange={handleChange}
             >
             </TextField>
           </Box>
           <Box sx={styles.box}>
-            <Button type="submit">
+            <Button sx={{
+              color: "#f1f1f1",
+              '&:hover': {
+                color: '#D3302F',
+              }
+            }}
+              onClick={handleClose}>Cancel</Button>
+            <Button sx={{
+              color: "#f1f1f1",
+              '&:hover': {
+                color: '#7EBEEA',
+              }
+            }}
+              type="submit">
               Validate
             </Button>
           </Box>
@@ -172,7 +227,7 @@ export const DeleteChannelPopup = (props) => {
     onClose()
   }
   const handleSubmit = async () => {
-    
+
     await axios.delete(`http://localhost:3001/channels/${channel.id}`, {
       headers: {
         'Authorization': `Bearer ${oauth.access_token}`
@@ -194,7 +249,7 @@ export const DeleteChannelPopup = (props) => {
       setChannels(channels)
     } catch (err) {
       console.error(err)
-    } 
+    }
     navigate('/channels')
   }
   return (
@@ -207,11 +262,17 @@ export const DeleteChannelPopup = (props) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "center" }}>
-          <Button onClick={handleClose}>Cancel</Button>
           <Button sx={{
-            color: "red",
+            color: "#f1f1f1",
             '&:hover': {
-              backgroundColor: '#D3302F',
+              color: '#D3302F',
+            }
+          }}
+            onClick={handleClose}>Cancel</Button>
+          <Button sx={{
+            color: "#f1f1f1",
+            '&:hover': {
+              color: '#7EBEEA',
             }
           }}
             onClick={handleSubmit}>Delete</Button>
@@ -226,6 +287,7 @@ export const EditMessagePopup = (props) => {
   const { oauth } = useContext(Context)
   const styles = useStyles(useTheme())
   const [newMessage, setNewMessage] = useState(message.content)
+
   const handleClose = () => {
     onClose()
     setNewMessage('')
@@ -259,7 +321,7 @@ export const EditMessagePopup = (props) => {
     <Dialog onClose={handleClose} open={open}>
       <Paper sx={styles.paperChannel}>
         <DialogTitle>Edit Message</DialogTitle>
- 
+
 
         <form autoComplete='off' onSubmit={handleSubmit} >
           <Box sx={styles.box}>
@@ -270,7 +332,7 @@ export const EditMessagePopup = (props) => {
               css={styles.content}
               value={newMessage}
               onChange={handleChange}
-              sx={{width: '70vw', maxWidth: '500px'}}
+              sx={{ width: '70vw', maxWidth: '500px' }}
             >
             </TextField>
           </Box>
