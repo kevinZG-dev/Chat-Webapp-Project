@@ -7,6 +7,7 @@ import { IconButton, Paper } from '@mui/material';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/Edit';
 import { Tooltip } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -22,7 +23,7 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import axios from 'axios';
 import Context from '../Context';
 import { useState } from 'react'
-import { AddUserPopup, DeleteChannelPopup } from '../Popup'
+import { AddUserPopup, DeleteChannelPopup, EditMessagePopup } from '../Popup'
 dayjs.extend(calendar)
 dayjs.extend(updateLocale)
 dayjs.updateLocale('en', {
@@ -77,6 +78,7 @@ export default forwardRef(({
   const { oauth } = useContext(Context)
   const [toggleAddUser, setToggleAddUser] = useState(false)
   const [toggleDeleteChannel, setToggleDeleteChannel] = useState(false)
+  const [toggleEditMessage, setToggleEditMessage] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   // Expose the `scroll` action
@@ -136,6 +138,13 @@ export default forwardRef(({
     deleteMessage(creation)
     handleCloseAction()
   }
+  const handleOpenEditMessage = () => {
+    setToggleEditMessage(true)
+  }
+  const handleCloseEditMessage = () => {
+    setToggleEditMessage(false)
+    handleCloseAction()
+  }
   return (
     <div css={styles.root} ref={rootEl}>
       <div css={styles.bar}>
@@ -154,9 +163,9 @@ export default forwardRef(({
             <GroupAddIcon />
           </IconButton>
         </Tooltip>
-        { 
+        {
           oauth.email === channel.creator
-          ?
+            ?
             <Tooltip title="Delete channel">
               <IconButton
                 aria-label="Delete channel"
@@ -165,7 +174,7 @@ export default forwardRef(({
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
-          :
+            :
             <IconButton
               aria-label="Delete channel"
               disabled
@@ -225,8 +234,14 @@ export default forwardRef(({
                 >
                   <Paper sx={{ background: 'linear-gradient(to bottom, #103c76, #380036 )', }}>
 
-                    <MenuItem onClick={handleCloseAction}>Edit</MenuItem>
-                    <MenuItem onClick={() => handleDeleteMessage(message.author, channel.id, message.creation)}>Delete</MenuItem>
+                    <MenuItem onClick={handleOpenEditMessage}>
+                      <EditIcon />
+                      Edit
+                    </MenuItem>
+                    <MenuItem onClick={() => handleDeleteMessage(message.author, channel.id, message.creation)}>
+                      <DeleteIcon />
+                      Delete
+                    </MenuItem>
 
                   </Paper>
                 </Menu>
@@ -249,6 +264,12 @@ export default forwardRef(({
         open={toggleAddUser}
         channel={channel}
       />
+      <EditMessagePopup
+        onClose={handleCloseEditMessage}
+        open={toggleEditMessage}
+
+      />
+
 
 
 

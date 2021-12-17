@@ -234,14 +234,55 @@ export const DeleteChannelPopup = (props) => {
   )
 }
 
-// export const EditMessagePopup = (props) => {
-//   const { open, onClose, message} = props
-//   const { oauth } = useContext(Context)
+export const EditMessagePopup = (props) => {
+  const { open, onClose, message } = props
+  const { oauth } = useContext(Context)
+  const styles = useStyles(useTheme())
+  const [newMessage, setNewMessage] = useState('')
+  const handleClose = () => {
+    onClose()
+  }
+  const handleChange = (e) => {
+    setNewMessage(e.target.value)
+  }
+  const handleSubmit = () => {
 
-//   return (
+  }
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <Paper sx={styles.paperChannel}>
+        <DialogTitle>Edit Message</DialogTitle>
+ 
 
-//   )
-// }
+        <form autoComplete='off' onSubmit={handleSubmit} >
+          <Box sx={styles.box}>
+            <TextField
+              id="input-with-icon-textfield"
+              label="User name"
+              variant="standard"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
+              css={styles.content}
+              value={newMessage}
+              onChange={handleChange}
+            >
+            </TextField>
+          </Box>
+          <Box sx={styles.box}>
+            <Button type="submit">
+              Validate
+            </Button>
+          </Box>
+        </form>
+      </Paper>
+    </Dialog>
+  )
+}
 export const SettingsPopup = () => {
 
   // return (
