@@ -28,9 +28,7 @@ const api = {
         }).on('data', ({ key, value }) => {
           channel = JSON.parse(value)
           channel.id = key.split(':')[1]
-
-          const listOfUsers = channel.listOfUsers.split(',')
-          listOfUsers.forEach(element => {
+          channel.listOfUsers.forEach(element => {
             if (element === user) {
               channels.push(channel)
             }

@@ -46,7 +46,6 @@ export default function Channels() {
     fetch()
 
   }, [oauth, setChannels])
-  console.log(channels);
   return (
     <ul css={styles.root}>
       <li css={styles.channel}>

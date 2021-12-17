@@ -25,8 +25,11 @@ const useStyles = (theme) => {
 export const ChannelPopup = (props) => {
   const styles = useStyles(useTheme())
   const { onClose, open } = props
-  const { oauth, setChannels, user } = useContext(Context)
+  const { oauth, channels, setChannels, user } = useContext(Context)
   const [channelName, setChannelName] = useState("")
+  const addChannels = (newChannel) => {
+    setChannels([...channels, newChannel])
+  }
   const handleClose = () => {
     onClose()
   }
@@ -36,30 +39,18 @@ export const ChannelPopup = (props) => {
   const handleSubmit = async (e) => {
     if (channelName !== '') {
       e.preventDefault()
-      await axios.post('http://localhost:3001/channels/', {
+      const email = [oauth.email]
+      const { data: channel } = await axios.post('http://localhost:3001/channels/', {
         name: `${channelName}`,
         creator: `${oauth.email}`,
-        listOfUsers: `${oauth.email.split()}`
+        listOfUsers: email
 
       }, {
         headers: {
           'Authorization': `Bearer ${oauth.access_token}`
         }
       })
-      try {
-        const { data: channels } = await axios.get('http://localhost:3001/channels', {
-          headers: {
-            'Authorization': `Bearer ${oauth.access_token}`
-          },
-          params: {
-            user: `${oauth.email}`,
-          }
-        })
-        console.log(channels);
-        setChannels(channels)
-      } catch (err) {
-        console.error(err)
-      }
+      addChannels(channel)
       setChannelName('')
     }
     handleClose()
@@ -94,9 +85,9 @@ export const ChannelPopup = (props) => {
 }
 
 export const AddUserPopup = (props) => {
-  const { oauth, setChannels, currentChannel } = useContext(Context)
+  const { oauth, channels, setChannels, currentChannel } = useContext(Context)
   const { onClose, open, channel } = props
-  const [nameUser, setNameUser] = useState([])
+  const [nameUser, setNameUser] = useState('')
   const styles = useStyles(useTheme())
   const navigate = useNavigate();
 
@@ -105,39 +96,35 @@ export const AddUserPopup = (props) => {
   }
   const handleChange = (e) => {
     setNameUser(e.target.value)
-    console.log(nameUser);
+ 
   }
-  //console.log(currentChannel);
+  const updateChannels = (channelRet) => {
+    const updatedChannels = channels.map(channel => {
+      if (channel.id === channelRet.id) {
+        return channelRet
+      } else {
+        return channel
+      }
+    })
+    setChannels(updatedChannels)
+  }
   const handleSubmit = async (e) => {
     e.preventDefault()
-    let listOfUsers = (channel.listOfUsers.split()).concat(nameUser)
-    console.log(listOfUsers);
+    const list = channel.listOfUsers.concat([nameUser])
 
 
-    await axios.put(`http://localhost:3001/channels/${channel.id}`, {
+
+    const { data: channelRet } = await axios.put(`http://localhost:3001/channels/${channel.id}`, {
       name: `${channel.name}`,
       creator: `${oauth.email}`,
-      listOfUsers: `${listOfUsers}`,
+      listOfUsers: list,
       id: `${channel.id}`
     }, {
       headers: {
         'Authorization': `Bearer ${oauth.access_token}`
       }
     })
-    console.log(channel.id);
-    try {
-      const { data: channels } = await axios.get('http://localhost:3001/channels/', {
-        headers: {
-          'Authorization': `Bearer ${oauth.access_token}`
-        },
-        params: {
-          user: `${oauth.email}`,
-        }
-      })
-      setChannels(channels)
-    } catch (err) {
-      console.error(err)
-    }
+    updateChannels(channelRet)
     setNameUser('')
     handleClose()
   }
@@ -262,8 +249,6 @@ export const EditMessagePopup = (props) => {
         'Authorization': `Bearer ${oauth.access_token}`
       }
     })
-    console.log('test');
-    console.log(newMessage);
     editMessage(newMessage, message.creation)
     setNewMessage('')
     handleClose()

@@ -212,7 +212,7 @@ export default forwardRef(({
         fontSize: "13px",
         color: "#BFC7D7",
         marginBottom: "50px"
-      }}>Created by {channel.creator} / Users: {channel.listOfUsers.split(',').map(user => user + ' - ')}</span>
+      }}>Created by {channel.creator} / Users: {channel.listOfUsers.map(user => user + ' - ')}</span>
       <ul>
         {messages.map((message, i) => {
           const { value } = unified()
