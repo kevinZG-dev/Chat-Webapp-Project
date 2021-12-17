@@ -62,20 +62,15 @@ app.get('/channels/:id/messages', async (req, res) => {
 })
 
 app.post('/channels/:id/messages', async (req, res) => {
-  console.log(req.body);
   const message = await db.messages.create(req.params.id, req.body)
   res.status(201).json(message)
 })
 app.put('/channels/:id/messages', async (req, res) => {
-
-  console.log(req.query);
-  const message = await db.messages.update(req.query.author, req.query.channelId, req.query.creation)
+  const message = await db.messages.update(req.body, req.params.id, req.query.creation)
   res.status(201).json(message)
 })
 app.delete('/channels/:id/messages', async (req, res) => {
-
-  console.log(req.query);
-  const message = await db.messages.delete(req.query.author, req.query.channelId, req.query.creation)
+  const message = await db.messages.delete(req.query.author, req.params.id, req.query.creation)
   res.status(201).json(message)
 })
 

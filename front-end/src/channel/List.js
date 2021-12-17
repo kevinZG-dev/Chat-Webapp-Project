@@ -7,9 +7,13 @@ import { IconButton, Paper } from '@mui/material';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/Edit';
 import { Tooltip } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider';
+
+import MenuList from '@mui/material/MenuList';
 // Markdown
 import { unified } from 'unified'
 import markdown from 'remark-parse'
@@ -22,7 +26,14 @@ import updateLocale from 'dayjs/plugin/updateLocale'
 import axios from 'axios';
 import Context from '../Context';
 import { useState } from 'react'
-import { AddUserPopup, DeleteChannelPopup } from '../Popup'
+import { AddUserPopup, DeleteChannelPopup, EditMessagePopup } from '../Popup'
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Typography from '@mui/material/Typography';
+import ContentCut from '@mui/icons-material/ContentCut';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import ContentPaste from '@mui/icons-material/ContentPaste';
+import Cloud from '@mui/icons-material/Cloud';
 dayjs.extend(calendar)
 dayjs.extend(updateLocale)
 dayjs.updateLocale('en', {
@@ -69,6 +80,7 @@ const useStyles = (theme) => ({
 
 export default forwardRef(({
   deleteMessage,
+  editMessage,
   channel,
   messages,
   onScrollDown,
@@ -77,7 +89,9 @@ export default forwardRef(({
   const { oauth } = useContext(Context)
   const [toggleAddUser, setToggleAddUser] = useState(false)
   const [toggleDeleteChannel, setToggleDeleteChannel] = useState(false)
+  const [toggleEditMessage, setToggleEditMessage] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
+  const [currentMessage, setCurrentMessage] = useState()
   const open = Boolean(anchorEl)
   // Expose the `scroll` action
   useImperativeHandle(ref, () => ({
@@ -119,21 +133,38 @@ export default forwardRef(({
   const handleCloseDeleteChannel = () => {
     setToggleDeleteChannel(false)
   }
-  const handleOpenAction = (e) => {
+  const handleOpenAction = (e, message) => {
+    e.preventDefault()
+    setCurrentMessage(message)
+    console.log(message);
     setAnchorEl(e.currentTarget)
+
   }
   const handleCloseAction = () => {
     setAnchorEl(null)
+    setCurrentMessage(null)
   }
-  const handleDeleteMessage = async (author, channelId, creation) => {
-    await axios.delete(`http://localhost:3001/channels/${channelId}/messages`, {
+  const handleDeleteMessage = async (e) => {
+    e.preventDefault()
+    await axios.delete(`http://localhost:3001/channels/${channel.id}/messages`, {
       params: {
-        author: `${author}`,
-        channelId: `${channelId}`,
-        creation: `${creation}`
-      },
+        author: `${currentMessage.author}`,
+        creation: `${currentMessage.creation}`
+      }
+    }, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
     })
-    deleteMessage(creation)
+    
+    deleteMessage(currentMessage.creation)
+    handleCloseAction()
+  }
+  const handleOpenEditMessage = () => {
+    setToggleEditMessage(true)
+  }
+  const handleCloseEditMessage = () => {
+    setToggleEditMessage(false)
     handleCloseAction()
   }
   return (
@@ -154,9 +185,9 @@ export default forwardRef(({
             <GroupAddIcon />
           </IconButton>
         </Tooltip>
-        { 
+        {
           oauth.email === channel.creator
-          ?
+            ?
             <Tooltip title="Delete channel">
               <IconButton
                 aria-label="Delete channel"
@@ -165,7 +196,7 @@ export default forwardRef(({
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
-          :
+            :
             <IconButton
               aria-label="Delete channel"
               disabled
@@ -199,7 +230,7 @@ export default forwardRef(({
                 <p>
                   <span>{message.author}</span>
                   {' - '}
-                  <span>{dayjs(message.creation / 1000).calendar()}</span>
+                  <span>{dayjs(message.creation/1000).calendar()}</span>
                 </p>
                 {
                   message.author === oauth.email
@@ -207,7 +238,7 @@ export default forwardRef(({
                   <Tooltip title="Action">
                     <IconButton
                       aria-label="Action"
-                      onClick={handleOpenAction}
+                      onClick={(e) => handleOpenAction(e, message)}
                     >
                       <MoreVertIcon />
                     </IconButton>
@@ -222,18 +253,36 @@ export default forwardRef(({
                   MenuListProps={{
                     'aria-labelledby': 'basic-button',
                   }}
+
                 >
-                  <Paper sx={{ background: 'linear-gradient(to bottom, #103c76, #380036 )', }}>
 
-                    <MenuItem onClick={handleCloseAction}>Edit</MenuItem>
-                    <MenuItem onClick={() => handleDeleteMessage(message.author, channel.id, message.creation)}>Delete</MenuItem>
+                  <Paper sx={{
 
+                    width: 150, maxWidth: "100%"
+                  }}
+                  >
+                    <MenuList>
+                      <MenuItem onClick={handleOpenEditMessage}>
+                        <ListItemIcon>
+                          <EditIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>Edit</ListItemText>
+
+                      </MenuItem>
+                      <MenuItem onClick={handleDeleteMessage}>
+                        <ListItemIcon>
+                          <DeleteIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>Delete</ListItemText>
+                      </MenuItem>
+                    </MenuList>
                   </Paper>
                 </Menu>
 
               </div>
               <div dangerouslySetInnerHTML={{ __html: value }}>
               </div>
+
             </li>
           )
         })}
@@ -249,9 +298,18 @@ export default forwardRef(({
         open={toggleAddUser}
         channel={channel}
       />
+      {
+        toggleEditMessage 
+        &&
 
-
-
+      <EditMessagePopup
+        onClose={handleCloseEditMessage}
+        open={toggleEditMessage}
+        message={currentMessage}
+        channelId={channel.id}
+        editMessage={editMessage}
+      />
+      }
 
     </div >
   )
