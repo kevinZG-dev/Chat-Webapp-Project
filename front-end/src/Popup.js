@@ -18,7 +18,7 @@ const useStyles = (theme) => {
       padding: '20px',
     },
     box: {
-      margin: '10px'
+      margin: '30px'
     }
   }
 }
@@ -235,17 +235,39 @@ export const DeleteChannelPopup = (props) => {
 }
 
 export const EditMessagePopup = (props) => {
-  const { open, onClose, message } = props
+  const { open, onClose, message, channelId, editMessage } = props
   const { oauth } = useContext(Context)
   const styles = useStyles(useTheme())
-  const [newMessage, setNewMessage] = useState('')
+  const [newMessage, setNewMessage] = useState(message.content)
   const handleClose = () => {
     onClose()
+    setNewMessage('')
   }
   const handleChange = (e) => {
     setNewMessage(e.target.value)
   }
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+
+    e.preventDefault()
+    await axios.put(`http://localhost:3001/channels/${channelId}/messages`, {
+      author: `${message.author}`,
+      content: `${newMessage}`,
+
+    }, {
+      params: {
+        creation: `${message.creation}`
+      }
+    }, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      }
+    })
+    console.log('test');
+    console.log(newMessage);
+    editMessage(newMessage, message.creation)
+    setNewMessage('')
+    handleClose()
+
 
   }
   return (
@@ -257,23 +279,18 @@ export const EditMessagePopup = (props) => {
         <form autoComplete='off' onSubmit={handleSubmit} >
           <Box sx={styles.box}>
             <TextField
-              id="input-with-icon-textfield"
-              label="User name"
+              id="standard-basic"
+              label="New message"
               variant="standard"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <AccountCircle />
-                  </InputAdornment>
-                ),
-              }}
               css={styles.content}
               value={newMessage}
               onChange={handleChange}
+              sx={{width: '70vw', maxWidth: '500px'}}
             >
             </TextField>
           </Box>
           <Box sx={styles.box}>
+            <Button onClick={handleClose}>Cancel</Button>
             <Button type="submit">
               Validate
             </Button>

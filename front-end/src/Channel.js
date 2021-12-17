@@ -48,6 +48,18 @@ export default function Channel() {
     const filteredMessages = messages.filter(message => message.creation !== creation)
     setMessages(filteredMessages)
   }
+  const editMessage = (newMessage, creation) => {
+
+    const editedListMessage = messages.map(message => {
+      if (message.creation === creation) {
+        message.content = newMessage
+        return message
+      } else {
+        return message
+      }
+    })
+    setMessages(editedListMessage)
+  }
   useEffect( () => {
     const fetch = async () => {
       try{
@@ -80,6 +92,7 @@ export default function Channel() {
     <div css={styles.root}>
       <List
         deleteMessage={deleteMessage}
+        editMessage={editMessage}
         channel={channel}
         messages={messages}
         onScrollDown={onScrollDown}
