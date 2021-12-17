@@ -48,8 +48,10 @@ const api ={
       await db.put(`channels:${channel.id}`, JSON.stringify(channel));
       return merge(channel, { id: channel.id });
     },
-    delete: async (id) => {
+    delete: async (id, creator) => {
       if (!id) throw Error("Invalid channel");
+      const channel = await api.channels.get(id)
+      if (channel.creator !== creator ) throw Error("Not the creator of the channel you want to delete")
       await db.del(`channels:${id}`, (err) => {
         if (err) console.log(err);
       });
@@ -87,12 +89,19 @@ const api ={
         })
       })
     },
+    update: async (author, channelId, creation) => {
+      if (!channelId) throw Error("Invalid channel");
+      await db.put(`channels:${channelId}`, JSON.stringify(channel));
+      const message = messages.find(message => message.creation === creation)
+      if (message.author != author) throw Error('Invalid user')
+      return merge(channel, { channelId: channelId, creation: creation });
+    },
     delete: async (author, channelId, creation) => {
       if (!channelId) throw Error('Invalid channel')
 
       const messages = await api.messages.list(channelId)
       const message = messages.find(message => message.creation === creation)
-      if(message.author != author) throw Error('Invalid user')   
+      if(message.author !== author) throw Error('Invalid user')   
       await db.del(`messages:${channelId}:${creation}`)
     },
   },

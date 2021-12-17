@@ -185,12 +185,14 @@ export const DeleteChannelPopup = (props) => {
     onClose()
   }
   const handleSubmit = async () => {
+    
     await axios.delete(`http://localhost:3001/channels/${channel.id}`, {
       headers: {
         'Authorization': `Bearer ${oauth.access_token}`
       },
       params: {
-        id: `${channel.id}`
+        id: `${channel.id}`,
+        creator: `${channel.creator}`
       }
     })
     try {
@@ -232,6 +234,14 @@ export const DeleteChannelPopup = (props) => {
   )
 }
 
+// export const EditMessagePopup = (props) => {
+//   const { open, onClose, message} = props
+//   const { oauth } = useContext(Context)
+
+//   return (
+
+//   )
+// }
 export const SettingsPopup = () => {
 
   // return (

@@ -154,14 +154,25 @@ export default forwardRef(({
             <GroupAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Delete channel">
-          <IconButton
-            aria-label="Delete channel"
-            onClick={handleOpenDeleteChannel}
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+        { 
+          oauth.email === channel.creator
+          ?
+            <Tooltip title="Delete channel">
+              <IconButton
+                aria-label="Delete channel"
+                onClick={handleOpenDeleteChannel}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          :
+            <IconButton
+              aria-label="Delete channel"
+              disabled
+            >
+              <DeleteIcon />
+            </IconButton>
+        }
 
 
       </div>
@@ -242,6 +253,6 @@ export default forwardRef(({
 
 
 
-    </div>
+    </div >
   )
 })
