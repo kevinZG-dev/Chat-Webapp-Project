@@ -18,14 +18,22 @@ const useStyles = (theme) => {
       display: 'flex',
       alignItems: 'center'
     },
+    formLight: {
+      borderTop: `2px solid #8693ab`,
+      padding: '.5rem',
+      display: 'flex',
+      alignItems: 'center'
+    },
     content: {
       flex: '1 1 auto',
       '&.MuiTextField-root': {
         marginRight: theme.spacing(1),
       },
     },
-    send: {
-    },
+    specialOutline: {
+      borderColor: "pink",
+      borderWidth: 4
+    }
   }
 }
 
@@ -35,7 +43,7 @@ export default function Form({
   channel,
 }) {
   const [content, setContent] = useState('')
-  const { oauth } = useContext(Context)
+  const { oauth, darkMode } = useContext(Context)
   const styles = useStyles(useTheme())
   const onSubmit = async () => {
     const {data: message} = await axios.post(
@@ -56,7 +64,7 @@ export default function Form({
     setContent(e.target.value)
   }
   return (
-    <form css={styles.form} onSubmit={onSubmit} noValidate>
+    <form css={darkMode ? styles.form : styles.formLight} onSubmit={onSubmit} noValidate>
       <TextField
         id="outlined-multiline-flexible"
         label="Message"
@@ -66,6 +74,12 @@ export default function Form({
         onChange={handleChange}
         variant="outlined"
         css={styles.content}
+        inputProps={{
+          classes: {
+            borderColor: "black"
+          }
+        }}
+
       />
       <div>
         <Button
