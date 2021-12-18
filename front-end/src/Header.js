@@ -8,6 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Context from './Context';
 import Button from '@mui/material/Button';
 import logoBlanc from './icons/logo-blanc.png'
+import Gravatar from 'react-gravatar'
 
 const useStyles = (theme) => ({
   header: {
@@ -89,6 +90,10 @@ export default function Header({
         oauth ?
           <span css={styles.content}>
             {oauth.email}
+            <Gravatar
+              size={40}
+              style={{ border: 'solid',borderColor: 'black' , borderRadius: 20, margin: '10px' }}
+              email={oauth.email} />
             <Button
               sx={{
                 color: '#f1f1f1'
