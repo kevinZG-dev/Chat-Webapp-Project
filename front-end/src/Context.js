@@ -11,10 +11,11 @@ export const Provider = ({
 }) => {
   const [cookies, setCookie, removeCookie] = useCookies([])
   const [oauth, setOauth] = useState(cookies.oauth)
-  const [user, setUser] = useState()
+  const [user, setUser] = useState({})
   const [drawerVisible, setDrawerVisible] = useState(false)
   const [channels, setChannels] = useState([])
   const [currentChannel, setCurrentChannel] = useState(null)
+  const [darkMode, setDarkmode] = useState(true)
   return (
     <Context.Provider value={{
       oauth: oauth,
@@ -36,6 +37,8 @@ export const Provider = ({
       },
       user: user,
       setUser: setUser,
+      darkMode: darkMode,
+      setDarkmode: setDarkmode,
       channels: channels,
       drawerVisible: drawerVisible,
       setDrawerVisible: setDrawerVisible,

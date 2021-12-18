@@ -132,7 +132,7 @@ const LoadToken = ({
   removeCookie,
   setOauth
 }) => {
-  const { oauth, user, setUser } = useContext(Context)
+  const { oauth, user, setUser, setDarkmode } = useContext(Context)
   const styles = useStyles(useTheme())
   const navigate = useNavigate();
   useEffect(() => {
@@ -161,19 +161,22 @@ const LoadToken = ({
             for (const currentUser of users ) {
               if (currentUser.username === data.email) {
                 setUser(currentUser)
-                
+                setDarkmode(currentUser.darkTheme)
               }
             }
           } else {
             const currentUser = await axios.post(`http://localhost:3001/users`, {
               username: data.email,
+              darkTheme: true
             },
               {
                 headers: {
                   'Authorization': `Bearer ${data.access_token}`
                 }
               });
+              console.log(currentUser.data);
             setUser(currentUser.data)
+
           }
 
         } catch (err) {

@@ -36,7 +36,7 @@ const useStyles = (theme) => ({
 export default function Main() {
   const {
     // currentChannel, not yet used
-    drawerVisible,
+    drawerVisible, darkMode
   } = useContext(Context)
   
   const theme = useTheme()
@@ -46,7 +46,7 @@ export default function Main() {
   return (
     <main css={styles.root}>
       <Drawer
-        PaperProps={{ style: { position: 'relative', backgroundColor: '#103c76' } }}
+        PaperProps={{ style: { position: 'relative', backgroundColor: darkMode ? '#103c76' : '#B8B8BA' } }}
         BackdropProps={{ style: { position: 'relative' } }}
         ModalProps={{
           style: { position: 'relative' }

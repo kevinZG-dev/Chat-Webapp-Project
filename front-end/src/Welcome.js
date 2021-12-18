@@ -24,6 +24,7 @@ const useStyles = (theme) => ({
   icon: {
     width: '100%',
     fill: '#fff',
+    
   },
 })
 
