@@ -1,0 +1,26 @@
+version: '3'
+services:
+  dex:
+    image: webtech-project-dex
+    ports:
+      - "5556:5556"
+  back-end:
+    image: webtech-project-backend
+    volumes:
+      - backend-data:/data
+  front-end:
+    depends_on:
+      - back-end
+      - dex
+    image: webtech-project-frontend
+    command:  ["sh", "-c", "npm start"]
+    ports:
+      - "3000:3000"
+    environment:
+      BACKEND_HOST: back-end
+    links:
+      - back-end
+
+
+volumes:
+  backend-data: {}
