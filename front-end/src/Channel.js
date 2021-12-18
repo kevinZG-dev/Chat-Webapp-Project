@@ -22,6 +22,15 @@ const useStyles = (theme) => ({
     overflowX: 'auto',
     background: 'linear-gradient(to bottom, #103c76, #380036 )',
   },
+  rootLight: {
+    height: '100%',
+    flex: '1 1 auto',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+    overflowX: 'auto',
+    background: 'linear-gradient(to bottom, #f5f7fa, #537895 )',
+  },
   fab: {
     position: 'absolute !important',
     top: theme.spacing(2),
@@ -35,7 +44,7 @@ const useStyles = (theme) => ({
 export default function Channel() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const {channels, oauth} = useContext(Context)
+  const {channels, oauth, darkMode} = useContext(Context)
   const channel = channels.find( channel => channel.id === id)
   const styles = useStyles(useTheme())
   const listRef = useRef()
@@ -89,7 +98,7 @@ export default function Channel() {
     return (<div>loading</div>)
   }
   return (
-    <div css={styles.root}>
+    <div css={darkMode ? styles.root : styles.rootLight}>
       <List
         deleteMessage={deleteMessage}
         editMessage={editMessage}
