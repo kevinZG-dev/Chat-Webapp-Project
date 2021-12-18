@@ -109,16 +109,9 @@ export const ChannelPopup = (props) => {
     if (channelName !== '') {
       e.preventDefault()
       const listEmail = [oauth.email]
-      let stringOfListWithoutSpace = ''
-      let listOfAddedUsers = []
-      let finalListEmail = []
-      if(usersNames!=='') {
-        stringOfListWithoutSpace = usersNames.replace(/\s/g, '')
-        listOfAddedUsers = stringOfListWithoutSpace.split(',')
-        finalListEmail = listEmail.concat(listOfAddedUsers)
-      } else {
-        finalListEmail = [...listEmail]
-      }
+      const stringOfListWithoutSpace = usersNames.replace(/\s/g, '')
+      const listOfAddedUsers = stringOfListWithoutSpace.split(',')
+      const finalListEmail = listEmail.concat(listOfAddedUsers)
       const { data: channel } = await axios.post('http://localhost:3001/channels/', {
         name: `${channelName}`,
         creator: `${oauth.email}`,

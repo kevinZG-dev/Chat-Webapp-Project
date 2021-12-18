@@ -21,21 +21,16 @@ const styles = {
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
+    //backgroundColor: '#eff4f7',
+    //backgroundColor: '#1652a1',
     backgroundColor: '#103c76',
  
-  },
-  rootLight: {
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#f5f7fa',
-
   },
 }
 
 export default function App() {
   const location = useLocation()
-  const {oauth, darkMode} = useContext(Context)
+  const {oauth} = useContext(Context)
   const [drawerMobileVisible, setDrawerMobileVisible] = useState(false)
   const drawerToggleListener = () => {
     setDrawerMobileVisible(!drawerMobileVisible)
@@ -53,7 +48,7 @@ export default function App() {
     }}
   />)
   return (
-    <div className="App" css={darkMode ? styles.root : styles.rootLight}>
+    <div className="App" css={styles.root}>
       <Header drawerToggleListener={drawerToggleListener}/>
       <Routes>
         <Route exact path="/" element={oauth ? (gochannels) : (<Login />)}/>

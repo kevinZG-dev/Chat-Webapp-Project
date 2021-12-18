@@ -7,9 +7,7 @@ import { ReactComponent as ChannelIcon } from './icons/channel.svg';
 import { ReactComponent as FriendsIcon } from './icons/friends.svg';
 import { ReactComponent as SettingsIcon } from './icons/settings.svg';
 import { ChannelPopup, SettingsPopup } from './Popup';
-import { IconButton } from '@mui/material';
-import { useState, useContext } from 'react';
-import Context from './Context';
+import { useState } from 'react';
 
 const useStyles = (theme) => ({
   root: {
@@ -17,22 +15,8 @@ const useStyles = (theme) => ({
     flex: '1 1 auto',
     display: 'flex',
     background: 'linear-gradient(to bottom, #103c76, #380036 )',
-  },
-  rootLight: {
-    height: '100%',
-    flex: '1 1 auto',
-    display: 'flex',
-    // background: 'linear-gradient(to bottom, #f5f7fa, #8693ab )',
-    backgroundColor: '#d7e1ec'
-    
-  },
-  button: {
 
-  },
-  buttonLight: {
-    '&:hover' : {
-      backgroundColor: 'rgba(56, 109, 246, 0.2 )'
-    }
+    // background: 'rgba(0,0,0,.2)',
   },
   card: {
     textAlign: 'center',
@@ -42,17 +26,10 @@ const useStyles = (theme) => ({
     fill: '#fff',
     
   },
-  iconLight: {
-    width: '100%',
-    fill: '#1E2634',
-
-  },
-
 })
 
 export default function Welcome() {
   const styles = useStyles(useTheme())
-  const { darkMode } = useContext(Context)
   const [toggleCreateChannels, setToggleCreateChannels] = useState(false)
   const [toggleSettings, setToggleSettings] = useState(false)
   const handleOpenCreateChannels = () => {
@@ -69,7 +46,7 @@ export default function Welcome() {
     setToggleSettings(false)
   }
   return (
-    <div css={darkMode ? styles.root : styles.rootLight}>
+    <div css={styles.root}>
       <Grid
         container
         direction="row"
@@ -79,28 +56,28 @@ export default function Welcome() {
       >
         <Grid item xs>
           <div css={styles.card}>
-            <IconButton onClick={handleOpenCreateChannels} sx={darkMode ? styles.button : styles.buttonLight}>
-              <ChannelIcon css={darkMode ? styles.icon : styles.iconLight} />
-            </IconButton>
-            <Typography color={darkMode ? 'textPrimary' : "#1E2634"}>
+            <Button>
+              <ChannelIcon onClick={handleOpenCreateChannels} css={styles.icon} />
+            </Button>
+            <Typography color="textPrimary">
               Create channels
             </Typography>
           </div>
         </Grid>
         <Grid item xs>
           <div css={styles.card}>
-            <FriendsIcon css={darkMode ? styles.icon : styles.iconLight} />
-            <Typography color={darkMode ? 'textPrimary' : "#1E2634"}>
+            <FriendsIcon css={styles.icon} />
+            <Typography color="textPrimary">
               Invite friends
             </Typography>
           </div>
         </Grid>
         <Grid item xs>
           <div css={styles.card}>
-            <IconButton onClick={handleOpenSettings} sx={darkMode ? styles.button : styles.buttonLight}>
-              <SettingsIcon css={darkMode ? styles.icon : styles.iconLight} />
-            </IconButton>
-            <Typography color={darkMode ? 'textPrimary' : "#1E2634"}>
+            <Button>
+              <SettingsIcon onClick={handleOpenSettings} css={styles.icon} />
+            </Button>
+            <Typography color="textPrimary">
               Settings
             </Typography>
           </div>

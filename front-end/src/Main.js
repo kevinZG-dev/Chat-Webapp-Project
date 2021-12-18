@@ -46,7 +46,7 @@ export default function Main() {
   return (
     <main css={styles.root}>
       <Drawer
-        PaperProps={{ style: { position: 'relative', backgroundColor: darkMode ? '#103c76' : '#f5f7fa' } }}
+        PaperProps={{ style: { position: 'relative', backgroundColor: darkMode ? '#103c76' : '#B8B8BA' } }}
         BackdropProps={{ style: { position: 'relative' } }}
         ModalProps={{
           style: { position: 'relative' }

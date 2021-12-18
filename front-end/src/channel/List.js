@@ -34,7 +34,6 @@ import ContentCut from '@mui/icons-material/ContentCut';
 import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
 import Cloud from '@mui/icons-material/Cloud';
-import { color } from '@mui/system';
 dayjs.extend(calendar)
 dayjs.extend(updateLocale)
 dayjs.updateLocale('en', {
@@ -56,12 +55,6 @@ const useStyles = (theme) => ({
     },
   },
   message: {
-    padding: '.2rem .5rem',
-    ':hover': {
-      backgroundColor: 'rgba(255,255,255,.05)',
-    },
-  },
-  messageLight: {
     padding: '.2rem .5rem',
     ':hover': {
       backgroundColor: 'rgba(255,255,255,.05)',
@@ -93,7 +86,7 @@ export default forwardRef(({
   onScrollDown,
 }, ref) => {
   const styles = useStyles(useTheme())
-  const { oauth, darkMode } = useContext(Context)
+  const { oauth } = useContext(Context)
   const [toggleAddUser, setToggleAddUser] = useState(false)
   const [toggleDeleteChannel, setToggleDeleteChannel] = useState(false)
   const [toggleEditMessage, setToggleEditMessage] = useState(false)
@@ -163,7 +156,7 @@ export default forwardRef(({
         'Authorization': `Bearer ${oauth.access_token}`
       }
     })
-
+    
     deleteMessage(currentMessage.creation)
     handleCloseAction()
   }
@@ -174,7 +167,6 @@ export default forwardRef(({
     setToggleEditMessage(false)
     handleCloseAction()
   }
-
   return (
     <div css={styles.root} ref={rootEl}>
       <div css={styles.bar}>
@@ -183,14 +175,14 @@ export default forwardRef(({
           marginTop: "10px",
           marginBottom: "10px"
         }}>
-          <h1 css={{ margin: 0, color: !darkMode && '#1E2634' }}># {channel.name}</h1>
+          <h1 css={{ margin: 0 }}># {channel.name}</h1>
         </div>
         <Tooltip title="New user">
           <IconButton
             aria-label="New user"
             onClick={handleOpenAddUser}
           >
-            <GroupAddIcon sx={{ color: !darkMode && '#1E2634' }} />
+            <GroupAddIcon />
           </IconButton>
         </Tooltip>
         {
@@ -198,9 +190,10 @@ export default forwardRef(({
             ?
             <Tooltip title="Delete channel">
               <IconButton
+                aria-label="Delete channel"
                 onClick={handleOpenDeleteChannel}
               >
-                <DeleteIcon sx={{ color: !darkMode && '#1E2634' }} />
+                <DeleteIcon />
               </IconButton>
             </Tooltip>
             :
@@ -208,7 +201,7 @@ export default forwardRef(({
               aria-label="Delete channel"
               disabled
             >
-              <DeleteIcon sx={{ color: !darkMode && '#1E2634' }} />
+              <DeleteIcon />
             </IconButton>
         }
 
@@ -217,8 +210,8 @@ export default forwardRef(({
       <span css={{
         padding: '.2rem .5rem',
         fontSize: "13px",
-        color: darkMode ? "#BFC7D7" : "#8693ab",
-        marginBottom: "50px",
+        color: "#BFC7D7",
+        marginBottom: "50px"
       }}>Created by {channel.creator} / Users: {channel.listOfUsers.map(user => user + ' - ')}</span>
       <ul>
         {messages.map((message, i) => {
@@ -235,12 +228,9 @@ export default forwardRef(({
             >
               <div css={styles.bar}>
                 <p>
-                  <span css={{ color: !darkMode && "#1E2634" }}>{message.author} - </span>
-                  <span css={{
-                    color: !darkMode && "#1E2634"
-                  }}>
-                    {dayjs(message.creation / 1000).calendar()}
-                  </span>
+                  <span>{message.author}</span>
+                  {' - '}
+                  <span>{dayjs(message.creation/1000).calendar()}</span>
                 </p>
                 {
                   message.author === oauth.email
@@ -250,7 +240,7 @@ export default forwardRef(({
                       aria-label="Action"
                       onClick={(e) => handleOpenAction(e, message)}
                     >
-                      <MoreVertIcon sx={{ color: !darkMode && '#1E2634' }} />
+                      <MoreVertIcon />
                     </IconButton>
                   </Tooltip>
                 }
@@ -290,7 +280,7 @@ export default forwardRef(({
                 </Menu>
 
               </div>
-              <div css={{ color: !darkMode && '#1E2634' }} dangerouslySetInnerHTML={{ __html: value }}>
+              <div dangerouslySetInnerHTML={{ __html: value }}>
               </div>
 
             </li>
@@ -309,16 +299,16 @@ export default forwardRef(({
         channel={channel}
       />
       {
-        toggleEditMessage
+        toggleEditMessage 
         &&
 
-        <EditMessagePopup
-          onClose={handleCloseEditMessage}
-          open={toggleEditMessage}
-          message={currentMessage}
-          channelId={channel.id}
-          editMessage={editMessage}
-        />
+      <EditMessagePopup
+        onClose={handleCloseEditMessage}
+        open={toggleEditMessage}
+        message={currentMessage}
+        channelId={channel.id}
+        editMessage={editMessage}
+      />
       }
 
     </div >

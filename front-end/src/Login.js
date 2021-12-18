@@ -109,7 +109,7 @@ const Redirect = ({
 const Tokens = ({
   oauth
 }) => {
-  const { setOauth, setUser } = useContext(Context)
+  const { setOauth } = useContext(Context)
   const styles = useStyles(useTheme())
   const { id_token } = oauth
   const id_payload = id_token.split('.')[1]
@@ -117,7 +117,6 @@ const Tokens = ({
   const logout = (e) => {
     e.stopPropagation()
     setOauth(null)
-    setUser(null)
   }
   return (
     <div css={styles.root}>
