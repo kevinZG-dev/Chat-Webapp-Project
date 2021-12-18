@@ -1,6 +1,6 @@
 
 /** @jsxImportSource @emotion/react */
-import {useContext, useEffect} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
 // Layout
 import {Link} from '@mui/material';
@@ -11,6 +11,8 @@ import {useNavigate} from 'react-router-dom'
 import { Button, MenuList, Divider, MenuItem } from '@mui/material'
 import { width } from '@mui/system';
 import Login from './Login';
+import { ChannelPopup } from './Popup';
+import AddIcon from '@mui/icons-material/Add';
 const styles = {
   root: {
     '& a': {
@@ -44,7 +46,6 @@ export default function Channels() {
       }
     }
     fetch()
-
   }, [oauth, setChannels])
   return (
     <ul css={styles.root}>
@@ -60,7 +61,6 @@ export default function Channels() {
         <Divider sx={{
           marginTop: 1
         }}/>
-
       </li>
       { channels.map( (channel, i) => (
         <li key={i} css={styles.channel}>
@@ -88,6 +88,7 @@ export default function Channels() {
           </Button>
         </li>
       ))}
+
     </ul>
   );
 }

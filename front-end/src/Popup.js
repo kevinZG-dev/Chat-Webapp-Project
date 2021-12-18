@@ -76,6 +76,7 @@ export const ChannelPopup = (props) => {
               id="custom-css-outlined-input"
               label="Channel's name"
               variant="outlined"
+              required
               css={styles.content}
               value={channelName}
               onChange={handleChangeChannelName}
@@ -347,30 +348,53 @@ export const EditMessagePopup = (props) => {
     </Dialog>
   )
 }
-export const SettingsPopup = () => {
+export const SettingsPopup = (props) => {
+  const { onClose, open, } = props
+  const { oauth } = useContext(Context)
+  const styles = useStyles(useTheme())
 
-  // return (
-  //   <Dialog onClose={handleClose} open={open}>
-  //     <Paper sx={styles.paperChannel}>
+  const handleClose = () => {
+    onClose()
+  }
 
-  //       <DialogTitle>Create new channel</DialogTitle>
-  //       <form autoComplete='off' onSubmit={handleSubmit} >
-  //         <Box>
-  //           <TextField
-  //             id="custom-css-outlined-input"
-  //             label="Channel's name"
-  //             variant="outlined"
-  //             css={styles.content}>
-  //             onChange={event => setChannelName(event.target.value)}
-  //           </TextField>
-  //         </Box>
-  //         <Box>
-  //           <Button type="submit">
-  //             Validate
-  //           </Button>
-  //         </Box>
-  //       </form>
-  //     </Paper>
-  //   </Dialog>
-  // )
+  
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <Paper sx={styles.paperChannel}>
+
+        <DialogTitle>Settings</DialogTitle>
+        <form autoComplete='off'>
+          <Box sx={styles.box}>
+            <TextField
+              id="input-with-icon-textfield"
+              label="Add Users"
+              variant="standard"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
+      
+              css={styles.content}
+              value={oauth.email}
+     
+            >
+            </TextField>
+          </Box>
+          <Box sx={styles.box}>
+            <Button sx={{
+              color: "#f1f1f1",
+              '&:hover': {
+                color: '#D3302F',
+              }
+            }}
+              onClick={handleClose}>Cancel</Button>
+   
+          </Box>
+        </form>
+      </Paper>
+    </Dialog>
+  )
 }

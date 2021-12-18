@@ -6,7 +6,7 @@ import { Grid, setRef, Typography, Button } from '@mui/material';
 import { ReactComponent as ChannelIcon } from './icons/channel.svg';
 import { ReactComponent as FriendsIcon } from './icons/friends.svg';
 import { ReactComponent as SettingsIcon } from './icons/settings.svg';
-import { ChannelPopup } from './Popup';
+import { ChannelPopup, SettingsPopup } from './Popup';
 import { useState } from 'react';
 
 const useStyles = (theme) => ({
@@ -30,12 +30,19 @@ const useStyles = (theme) => ({
 export default function Welcome() {
   const styles = useStyles(useTheme())
   const [toggleCreateChannels, setToggleCreateChannels] = useState(false)
+  const [toggleSettings, setToggleSettings] = useState(false)
   const handleOpenCreateChannels = () => {
     setToggleCreateChannels(true)
-    
+
   }
   const handleCloseCreateChannels = () => {
     setToggleCreateChannels(false)
+  }
+  const handleOpenSettings = () => {
+    setToggleSettings(true)
+  }
+  const handleCloseSettings = () => {
+    setToggleSettings(false)
   }
   return (
     <div css={styles.root}>
@@ -51,9 +58,9 @@ export default function Welcome() {
             <Button>
               <ChannelIcon onClick={handleOpenCreateChannels} css={styles.icon} />
             </Button>
-              <Typography color="textPrimary">
-                Create channels
-              </Typography>
+            <Typography color="textPrimary">
+              Create channels
+            </Typography>
           </div>
         </Grid>
         <Grid item xs>
@@ -66,16 +73,22 @@ export default function Welcome() {
         </Grid>
         <Grid item xs>
           <div css={styles.card}>
-            <SettingsIcon css={styles.icon} />
+            <Button>
+              <SettingsIcon onClick={handleOpenSettings} css={styles.icon} />
+            </Button>
             <Typography color="textPrimary">
               Settings
             </Typography>
           </div>
         </Grid>
       </Grid>
-      <ChannelPopup 
+      <ChannelPopup
         open={toggleCreateChannels}
         onClose={handleCloseCreateChannels}
+      />
+      <SettingsPopup 
+        open={toggleSettings}
+        onClose={handleCloseSettings}
       />
     </div>
   );
