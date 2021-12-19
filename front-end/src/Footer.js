@@ -1,9 +1,10 @@
 
 /** @jsxImportSource @emotion/react */
 
-import { color } from "@mui/system";
+import { color, display } from "@mui/system";
 import { useContext } from "react";
 import Context from "./Context";
+import CodeIcon from '@mui/icons-material/Code';
 
 const styles = {
   footer: {
@@ -12,7 +13,10 @@ const styles = {
     flexShrink: 0,
     borderTop: 'solid',
     borderTopColor: 'white',
-    borderTopWidth: '1px' 
+    borderTopWidth: '1px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
 
   },
   footerLight: {
@@ -31,7 +35,11 @@ export default function Footer() {
   const { darkMode } = useContext(Context)
   return (
     <footer style={darkMode ? styles.footer : styles.footerLight}>
-      footer
+      <CodeIcon />
+      <span css={{ marginRight: "10px" }}>Kevin Zheng</span>
+      <span>|</span>
+      <span css={{ marginLeft: "10px" }}>Maxime Attal</span>
+      <CodeIcon />
     </footer>
   );
 }

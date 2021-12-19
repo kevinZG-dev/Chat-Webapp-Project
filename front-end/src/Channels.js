@@ -3,7 +3,7 @@
 import { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 // Layout
-import { Link } from '@mui/material';
+import { IconButton, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 // Local
 import Accordion from '@mui/material/Accordion';
@@ -36,6 +36,7 @@ export default function Channels() {
     oauth,
     channels, setChannels, setCurrentChannel, darkMode, user
   } = useContext(Context)
+  const [toggleCreateChannels, setToggleCreateChannels] = useState(false)
   const naviate = useNavigate();
   useEffect(() => {
     const fetch = async () => {
@@ -55,6 +56,14 @@ export default function Channels() {
     }
     fetch()
   }, [oauth, setChannels])
+  const handleOpenCreateChannels = () => {
+    setToggleCreateChannels(true)
+
+  }
+  const handleCloseCreateChannels = () => {
+    setToggleCreateChannels(false)
+  }
+
   return (
     <ul css={styles.root}>
       <li css={styles.channel}>
@@ -73,49 +82,71 @@ export default function Channels() {
         }} />
 
       </li>
-      {/* <Accordion sx={{
-        
-      }}>
+      <Accordion sx={{
+        color: !darkMode && '#1E2634',
+        backgroundColor: darkMode ? '#103c76' : '#f5f7fa',
+        width: "100%"
+      }}
+        defaultExpanded
+      >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={<ExpandMoreIcon sx={{ color: !darkMode && '#1E2634',}}/>}
           aria-controls="panel1a-content"
-          id="panel1a-header"
+          id="panela-header"
+          sx={{
+            backgroundColor: darkMode ? '#103c76' : '#f5f7fa',
+
+          }}
         >
-          <Typography>Accordion 1</Typography>
+          <Typography>Channels</Typography>
+
         </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
+        <AccordionDetails sx={{
+          padding: 0,
+          backgroundColor: darkMode ? '#103c76' : '#f5f7fa',
+        }}>
+          {channels.map((channel, i) => (
+            <li key={i} css={styles.channel}>
+
+              <Button
+                sx={{
+                  margin: 0,
+                  marginTop: "5px",
+                  marginBottom: "5px",
+                  paddingTop: "10px",
+                  paddingBottom: "10px",
+                  width: "100%",
+                  textTransform: "none",
+                  color: darkMode ? "#f1f1f1" :"#1E2634",
+                  '&:hover': {
+                    color: '#f1f1f1',
+                    backgroundColor: '#380036',
+                  }
+                }}
+                variant="text"
+                onClick={(e) => {
+                  e.preventDefault()
+                  naviate(`/channels/${channel.id}`)
+                  setCurrentChannel(`${channel.id}`)
+
+                }}
+              >
+                {channel.name}
+              </Button>
+            </li>
+          ))}
         </AccordionDetails>
-      </Accordion> */}
-      {channels.map((channel, i) => (
-        <li key={i} css={styles.channel}>
-
-          <Button
-            sx={{
-              margin: 1,
-              width: "170px",
-              textTransform: "none",
-              color: !darkMode && "#1E2634",
-              '&:hover': {
-                color: '#f1f1f1',
-                backgroundColor: '#380036',
-              }
-            }}
-            variant="text"
-            onClick={(e) => {
-              e.preventDefault()
-              naviate(`/channels/${channel.id}`)
-              setCurrentChannel(`${channel.id}`)
-
-            }}
-          >
-            {channel.name}
-          </Button>
-        </li>
-      ))}
+      </Accordion>
+      
+      <IconButton onClick={handleOpenCreateChannels}
+        sx={{ color: !darkMode && '#1E2634',}}
+      >
+        <AddIcon />
+      </IconButton>
+      <ChannelPopup
+        open={toggleCreateChannels}
+        onClose={handleCloseCreateChannels}
+      />
 
     </ul>
   );

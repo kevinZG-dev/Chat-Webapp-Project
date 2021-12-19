@@ -91,6 +91,7 @@ export const ChannelPopup = (props) => {
   const { oauth, channels, setChannels, user } = useContext(Context)
   const [channelName, setChannelName] = useState('')
   const [usersNames, setUsersNames] = useState('')
+  const [toggleValidationAddUsers, setToggleValidationAddUsers] = useState(true)
   const addChannels = (newChannel) => {
     setChannels([...channels, newChannel])
   }
@@ -98,12 +99,31 @@ export const ChannelPopup = (props) => {
     onClose()
     setChannelName('')
     setUsersNames('')
+    setToggleValidationAddUsers(true)
   }
   const handleChangeChannelName = (e) => {
     setChannelName(e.target.value)
   }
   const handleChangeAddUsers = (e) => {
     setUsersNames(e.target.value)
+    setToggleValidationAddUsers(true)
+  }
+  const isValidAddUsers = async (added) => {
+    const { data: users } = await axios.get(`http://localhost:3001/users`, {
+      headers: {
+        'Authorization': `Bearer ${oauth.access_token}`
+      },
+    });
+    let isValid = true
+    added.forEach(added => {
+      if ((!users.some(user => user.username === added) || added === user.username)) {
+        isValid = false
+        console.log('test');
+
+      }
+    })
+    return isValid
+
   }
   const handleSubmit = async (e) => {
     if (channelName !== '') {
@@ -112,27 +132,37 @@ export const ChannelPopup = (props) => {
       let stringOfListWithoutSpace = ''
       let listOfAddedUsers = []
       let finalListEmail = []
-      if(usersNames!=='') {
+      let isValided = true
+      if (usersNames !== '') {
         stringOfListWithoutSpace = usersNames.replace(/\s/g, '')
         listOfAddedUsers = stringOfListWithoutSpace.split(',')
         finalListEmail = listEmail.concat(listOfAddedUsers)
+        isValided = await isValidAddUsers(listOfAddedUsers)
+
       } else {
         finalListEmail = [...listEmail]
       }
-      const { data: channel } = await axios.post('http://localhost:3001/channels/', {
-        name: `${channelName}`,
-        creator: `${oauth.email}`,
-        listOfUsers: finalListEmail
+      if (isValided) {
 
-      }, {
-        headers: {
-          'Authorization': `Bearer ${oauth.access_token}`
-        }
-      })
-      addChannels(channel)
+        const { data: channel } = await axios.post('http://localhost:3001/channels/', {
+          name: `${channelName}`,
+          creator: `${oauth.email}`,
+          listOfUsers: finalListEmail
+
+        }, {
+          headers: {
+            'Authorization': `Bearer ${oauth.access_token}`
+          }
+        })
+        addChannels(channel)
+        setToggleValidationAddUsers(true)
+        handleClose()
+      } else {
+        setToggleValidationAddUsers(false)
+      }
 
     }
-    handleClose()
+
 
   }
   return (
@@ -155,10 +185,15 @@ export const ChannelPopup = (props) => {
           </Box>
           <Box sx={styles.box}>
             <TextField
+              error={!toggleValidationAddUsers}
+              helperText={
+                toggleValidationAddUsers
+                  ? "Enter users emails separate by , "
+                  : "These users don't exist or already invited."
+              }
               id="input-with-icon-textfield"
               label="Add Users"
               variant="standard"
-              helperText="Enter users emails separate by , "
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -200,14 +235,18 @@ export const AddUserPopup = (props) => {
   const { oauth, channels, setChannels, currentChannel } = useContext(Context)
   const { onClose, open, channel } = props
   const [usersNames, setUsersNames] = useState('')
+  const [toggleValidationAddUsers, setToggleValidationAddUsers] = useState(true)
   const styles = useStyles(useTheme())
   const navigate = useNavigate();
 
   const handleClose = () => {
     onClose()
+    setUsersNames('')
+    setToggleValidationAddUsers(true)
   }
   const handleChange = (e) => {
     setUsersNames(e.target.value)
+    setToggleValidationAddUsers(true)
 
   }
   const updateChannels = (channelRet) => {
@@ -220,25 +259,48 @@ export const AddUserPopup = (props) => {
     })
     setChannels(updatedChannels)
   }
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    const stringOfListWithoutSpace = usersNames.replace(/\s/g, '')
-    const listOfAddedUsers = stringOfListWithoutSpace.split(',')
-    const finalListEmail = channel.listOfUsers.concat(listOfAddedUsers)
-
-    const { data: channelRet } = await axios.put(`http://localhost:3001/channels/${channel.id}`, {
-      name: `${channel.name}`,
-      creator: `${oauth.email}`,
-      listOfUsers: finalListEmail,
-      id: `${channel.id}`
-    }, {
+  const isValidAddUsers = async (added, already) => {
+    const { data: users } = await axios.get(`http://localhost:3001/users`, {
       headers: {
         'Authorization': `Bearer ${oauth.access_token}`
+      },
+    });
+    let isValid = true
+    added.forEach(added => {
+      if ((!users.some(user => user.username === added) || (already.some(alr => alr === added)))) {
+        isValid = false
       }
     })
-    updateChannels(channelRet)
-    setUsersNames('')
-    handleClose()
+    return isValid
+
+  }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (usersNames !== '') {
+
+      const stringOfListWithoutSpace = usersNames.replace(/\s/g, '')
+      const listOfAddedUsers = stringOfListWithoutSpace.split(',')
+      const finalListEmail = channel.listOfUsers.concat(listOfAddedUsers)
+      const isValided = await isValidAddUsers(listOfAddedUsers, channel.listOfUsers)
+      if (isValided) {
+
+        const { data: channelRet } = await axios.put(`http://localhost:3001/channels/${channel.id}`, {
+          name: `${channel.name}`,
+          creator: `${oauth.email}`,
+          listOfUsers: finalListEmail,
+          id: `${channel.id}`
+        }, {
+          headers: {
+            'Authorization': `Bearer ${oauth.access_token}`
+          }
+        })
+        updateChannels(channelRet)
+        setToggleValidationAddUsers(true)
+        handleClose()
+      } else {
+        setToggleValidationAddUsers(false)
+      }
+    }
   }
   return (
     <Dialog onClose={handleClose} open={open}>
@@ -249,8 +311,15 @@ export const AddUserPopup = (props) => {
           <Box sx={styles.box}>
             <TextField
               id="input-with-icon-textfield"
+              error={!toggleValidationAddUsers}
+              helperText={
+                toggleValidationAddUsers
+                  ? "Enter users emails separate by , "
+                  : "These users don't exist or already invited."
+              }
               label="Add Users"
               variant="standard"
+              required
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -258,7 +327,6 @@ export const AddUserPopup = (props) => {
                   </InputAdornment>
                 ),
               }}
-              helperText="Enter users emails separate by , "
               css={styles.content}
               value={usersNames}
               onChange={handleChange}
