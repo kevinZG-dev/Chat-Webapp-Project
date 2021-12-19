@@ -143,7 +143,6 @@ export default forwardRef(({
   const handleOpenAction = (e, message) => {
     e.preventDefault()
     setCurrentMessage(message)
-    console.log(message);
     setAnchorEl(e.currentTarget)
 
   }
@@ -208,7 +207,7 @@ export default forwardRef(({
               aria-label="Delete channel"
               disabled
             >
-              <DeleteIcon sx={{ color: !darkMode && '#1E2634' }} />
+              <DeleteIcon sx={{ color: !darkMode && 'rgba(0,0,0,0.2)' }} />
             </IconButton>
         }
 
@@ -255,38 +254,49 @@ export default forwardRef(({
                   </Tooltip>
                 }
                 <Menu
-
                   id="basic-menu"
                   anchorEl={anchorEl}
                   open={open}
                   onClose={handleCloseAction}
+                  PaperProps={{
+                    sx: {
+                      background: darkMode
+                        ? 'linear-gradient(to bottom, #103c76, #380036 )'
+                        : 'linear-gradient(to bottom, #f5f7fa, #537895 )',
+                    }
+                  }}
                   MenuListProps={{
                     'aria-labelledby': 'basic-button',
                   }}
-
                 >
+                  <MenuList sx={{ padding: 0 }}>
+                    <MenuItem sx={{
+                      color: !darkMode && "#1E2634"
+                    }}
+                      onClick={handleOpenEditMessage}>
+                      <ListItemIcon>
+                        <EditIcon sx={{
+                          color: !darkMode && "#1E2634"
+                        }}
+                          fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>Edit</ListItemText>
 
-                  <Paper sx={{
+                    </MenuItem>
+                    <MenuItem sx={{
+                      color: !darkMode && "#1E2634"
+                    }}
+                      onClick={handleDeleteMessage}>
+                      <ListItemIcon>
+                        <DeleteIcon sx={{
+                          color: !darkMode && "#1E2634"
+                        }}
+                          fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText>Delete</ListItemText>
+                    </MenuItem>
+                  </MenuList>
 
-                    width: 150, maxWidth: "100%"
-                  }}
-                  >
-                    <MenuList>
-                      <MenuItem onClick={handleOpenEditMessage}>
-                        <ListItemIcon>
-                          <EditIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>Edit</ListItemText>
-
-                      </MenuItem>
-                      <MenuItem onClick={handleDeleteMessage}>
-                        <ListItemIcon>
-                          <DeleteIcon fontSize="small" />
-                        </ListItemIcon>
-                        <ListItemText>Delete</ListItemText>
-                      </MenuItem>
-                    </MenuList>
-                  </Paper>
                 </Menu>
 
               </div>

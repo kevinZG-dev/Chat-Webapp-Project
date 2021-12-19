@@ -15,6 +15,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Gravatar from 'react-gravatar';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { Grid } from '@mui/material';
 const useStyles = (theme) => {
 
   return {
@@ -487,11 +492,13 @@ export const EditMessagePopup = (props) => {
   )
 }
 export const SettingsPopup = (props) => {
-  const { onClose, open, } = props
-  const { oauth, user, setDarkmode } = useContext(Context)
+  const { onClose, open } = props
+  const { oauth, user, darkMode, setDarkmode } = useContext(Context)
   const [fullName, setFullName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [toggleChecked, setToggleCheked] = useState(true)
+  const [anchorElAv, setAnchorElAv] = useState(null)
+  const openAv = Boolean(anchorElAv)
   const styles = useStyles(useTheme())
 
   const handleClose = () => {
@@ -512,32 +519,137 @@ export const SettingsPopup = (props) => {
   const handleSubmit = () => {
 
   }
+  const handleOpenAvatar = (e) => {
+    setAnchorElAv(e.currentTarget)
+  }
+  const handleCloseAvatar = () => {
+    setAnchorElAv(null)
+  }
   return (
     <Dialog onClose={handleClose} open={open}>
       <Paper sx={styles.papperChannelSettings}>
-
-
         <DialogTitle sx={{
           padding: "10px 15px",
         }}
         >
           Settings
         </DialogTitle>
-        <Box>
 
-        </Box>
         <form autoComplete='off'>
+          <Box>
+            <IconButton onClick={handleOpenAvatar} size="small" sx={{ ml: 2 }}>
+              <Gravatar
+                size={30}
+                style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
+                email={oauth.email} />
+            </IconButton>
+          </Box>
+          <Menu
+            anchorEl={anchorElAv}
+            open={openAv}
+            onClose={handleCloseAvatar}
+            onClick={handleCloseAvatar}
+
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: 'visible',
+                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                background: darkMode
+                  ? 'linear-gradient(to bottom, #103c76, #380036 )'
+                  : 'linear-gradient(to bottom, #f5f7fa, #537895 )',
+
+                mt: 1.5,
+                '& .MuiAvatar-root': {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                '&:before': {
+                  content: '""',
+                  display: 'block',
+                  position: 'absolute',
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  backgroundColor: darkMode
+                    ? '#103c76'
+                    : '#f5f7fa',
+                  transform: 'translateY(-50%) rotate(45deg)',
+                  zIndex: 0,
+                },
+              },
+            }}
+
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          >
+            <Grid container rowSpacing={1} columnSpacing={1}
+            sx={{
+              width: "100%",
+              height:"100%",
+              margin: 0,
+              padding: 0,
+              display: "grid",
+              gridColumn: 3
+            }}>
+              <Grid item xs={4}>
+                <IconButton sx={{ margin: "5px" }}
+                  onClick={handleOpenAvatar} size="small"
+                >
+                  <Gravatar
+                    size={30}
+                    style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
+                    email={oauth.email}
+                    sx={{
+
+                    }} />
+
+                </IconButton>
+              </Grid>
+              <Grid item xs={4}>
+                <IconButton onClick={handleOpenAvatar} size="small">
+                  <Gravatar
+                    size={30}
+                    style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
+                    email={oauth.email} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={4}>
+                <IconButton onClick={handleOpenAvatar} size="small">
+                  <Gravatar
+                    size={30}
+                    style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
+                    email={oauth.email} />
+                </IconButton>
+              </Grid>
+              <Grid item xs={4}>
+                <IconButton onClick={handleOpenAvatar} size="small">
+                  <Gravatar
+                    size={30}
+                    style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
+                    email={oauth.email} />
+                </IconButton>
+              </Grid>
+            </Grid>
+
+              
+              
+              
+             
+
+
+
+          </Menu>
           <Box sx={styles.box}>
             <TextField
               id="outlined-basic"
               label="Email"
               variant="outlined"
               disabled
-
-
-
               value={oauth.email}
-
             >
             </TextField>
           </Box>

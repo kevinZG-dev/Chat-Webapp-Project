@@ -53,7 +53,7 @@ export default function App() {
     }}
   />)
   return (
-    <div className="App" css={darkMode ? styles.root : styles.rootLight}>
+    <div className="App" css={(darkMode || !oauth) ? styles.root : styles.rootLight}>
       <Header drawerToggleListener={drawerToggleListener}/>
       <Routes>
         <Route exact path="/" element={oauth ? (gochannels) : (<Login />)}/>

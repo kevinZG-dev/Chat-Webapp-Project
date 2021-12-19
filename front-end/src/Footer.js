@@ -26,7 +26,10 @@ const styles = {
     borderTop: 'solid',
     borderTopColor: 'white',
     borderTopWidth: '1px',
-    color: '#1E2634'
+    color: '#1E2634',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
 
   },
 }

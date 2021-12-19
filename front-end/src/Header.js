@@ -2,7 +2,7 @@
 /** @jsxImportSource @emotion/react */
 import { useContext, useState } from 'react';
 // Layout
-import { useTheme } from '@mui/styles';
+import { makeStyles, useTheme } from '@mui/styles';
 import { IconButton, Link, Tooltip } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Context from './Context';
@@ -75,11 +75,10 @@ const useStyles = (theme) => ({
   menu: {
     [theme.breakpoints.up('sm')]: {
       display: 'none !important',
-    },
-
-    
-
-
+    }
+  },
+  menuPaper: {
+    backgroundColor: 'lightblue'
   }
 })
 
@@ -114,17 +113,17 @@ export default function Header({
     setToggleSettings(false)
   }
   return (
-    <header css={darkMode ? styles.header : styles.headerLight}>
+    <header css={(darkMode || !oauth) ? styles.header : styles.headerLight}>
       <IconButton
         color="inherit"
         aria-label="open drawer"
         onClick={drawerToggle}
         css={styles.menu}
       >
-        <MenuIcon sx={{ color: !darkMode && "#1E2634"}}/>
+        <MenuIcon sx={{ color: (!darkMode && oauth) && "#1E2634" }} />
       </IconButton>
-      <img css={styles.logoimg} src={darkMode ? logoBlanc : logoCouleur} alt="Logo" />
-      <h1 css={darkMode ? styles.logo : styles.logoLight}>Blabla</h1>
+      <img css={styles.logoimg} src={(darkMode || !oauth) ? logoBlanc : logoCouleur} alt="Logo" />
+      <h1 css={(darkMode || !oauth) ? styles.logo : styles.logoLight}>Blabla</h1>
 
 
       {
@@ -145,11 +144,16 @@ export default function Header({
               open={open}
               onClose={handleCloseProfile}
               onClick={handleCloseProfile}
+
               PaperProps={{
                 elevation: 0,
                 sx: {
                   overflow: 'visible',
                   filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                  background: darkMode
+                    ? 'linear-gradient(to bottom, #103c76, #380036 )'
+                    : 'linear-gradient(to bottom, #f5f7fa, #537895 )',
+
                   mt: 1.5,
                   '& .MuiAvatar-root': {
                     width: 32,
@@ -165,7 +169,9 @@ export default function Header({
                     right: 14,
                     width: 10,
                     height: 10,
-                    bgcolor: 'background.paper',
+                    backgroundColor: darkMode
+                      ? '#103c76'
+                      : '#f5f7fa',
                     transform: 'translateY(-50%) rotate(45deg)',
                     zIndex: 0,
                   },
@@ -182,15 +188,29 @@ export default function Header({
                 alignItems: "start",
                 justifyContent: "start"
               }}>
-                <span>Signed in as </span>
-                <span css={{fontWeight: "bold"}}>{oauth.email}</span>
+                <span css={{ color: !darkMode && "#1E2634" }}>Signed in as </span>
+                <span css={{
+                  fontWeight: "bold",
+                  color: !darkMode && "#1E2634"
+                }}
+                >
+                  {oauth.email}</span>
               </MenuItem>
-     
+
               <Divider />
-   
-              <MenuItem onClick={handleOpenSettings}>
+
+              <MenuItem
+                onClick={handleOpenSettings}
+                sx={{
+                  color: !darkMode && "#1E2634"
+                }}
+              >
                 <ListItemIcon>
-                  <Settings fontSize="small" />
+                  <Settings
+                    sx={{
+                      color: !darkMode && "#1E2634"
+                    }}
+                    fontSize="small" />
                 </ListItemIcon>
                 Settings
               </MenuItem>
@@ -204,10 +224,10 @@ export default function Header({
                 }
               }}
               variant='text' onClick={onClickLogout}>Logout</Button>
-              <SettingsPopup 
-                open={toggleSettings}
-                onClose={handleCloseSettings}
-              />
+            <SettingsPopup
+              open={toggleSettings}
+              onClose={handleCloseSettings}
+            />
           </span>
           :
           <span css={styles.content}>New user</span>
