@@ -77,9 +77,6 @@ const useStyles = (theme) => ({
       display: 'none !important',
     }
   },
-  menuPaper: {
-    backgroundColor: 'lightblue'
-  }
 })
 
 export default function Header({
@@ -88,11 +85,12 @@ export default function Header({
   const styles = useStyles(useTheme())
   const {
     oauth, setOauth,
-    drawerVisible, setDrawerVisible, darkMode, setDarkmode
+    drawerVisible, setDrawerVisible, darkMode, user
   } = useContext(Context)
   const [anchorEl, setAnchorEl] = useState(null)
   const [toggleSettings, setToggleSettings] = useState(false)
   const open = Boolean(anchorEl)
+  
   const drawerToggle = (e) => {
     setDrawerVisible(!drawerVisible)
   }
@@ -130,14 +128,25 @@ export default function Header({
         oauth ?
           <span css={styles.content}>
             <Tooltip title="Account">
+              {
+                user.avatar === '0'
+                  ?
+                  <IconButton onClick={handleOpenProfile} size="small" sx={{ ml: 2 }}>
+                    <Gravatar
+                      size={30}
+                      style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
+                      email={oauth.email} />
+                  </IconButton>
+                  :
+                  <IconButton sx={{ margin: "5px" }}
+                    onClick={handleOpenProfile} size="small"
+                  >
+                    <Avatar size={30}
+                      style={{ border: 'thick double #32a1ce', borderRadius: 25, margin: 0 }}
+                      alt="" src={user.avatar} />
+                  </IconButton>
+              }
 
-              <IconButton onClick={handleOpenProfile} size="small" sx={{ ml: 2 }}>
-
-                <Gravatar
-                  size={30}
-                  style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
-                  email={oauth.email} />
-              </IconButton>
             </Tooltip>
             <Menu
               anchorEl={anchorEl}

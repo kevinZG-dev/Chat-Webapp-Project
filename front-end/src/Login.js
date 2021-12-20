@@ -152,14 +152,14 @@ const LoadToken = ({
         removeCookie('code_verifier')
         setOauth(data)
 
-        try { 
+        try {
           const { data: users } = await axios.get(`http://localhost:3001/users`, {
             headers: {
               'Authorization': `Bearer ${data.access_token}`
             },
           });
           if (users.some(user => user.username === data.email)) {
-            for (const currentUser of users ) {
+            for (const currentUser of users) {
               if (currentUser.username === data.email) {
                 setUser(currentUser)
                 setDarkmode(currentUser.darkTheme)
@@ -168,14 +168,17 @@ const LoadToken = ({
           } else {
             const currentUser = await axios.post(`http://localhost:3001/users`, {
               username: data.email,
-              darkTheme: true
+              darkTheme: true,
+              fullName: '',
+              phoneNumber: '',
+              avatar: '0'
             },
               {
                 headers: {
                   'Authorization': `Bearer ${data.access_token}`
                 }
               });
-              console.log(currentUser.data);
+            console.log(currentUser.data);
             setUser(currentUser.data)
 
           }

@@ -20,6 +20,14 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Grid } from '@mui/material';
+import { Avatar } from '@mui/material';
+import avatar7 from './avatar/7.png'
+import avatar1 from './avatar/1.png'
+import avatar2 from './avatar/2.png'
+import avatar3 from './avatar/3.png'
+import avatar4 from './avatar/4.png'
+import avatar5 from './avatar/5.png'
+import avatar6 from './avatar/6.png'
 const useStyles = (theme) => {
 
   return {
@@ -123,7 +131,6 @@ export const ChannelPopup = (props) => {
     added.forEach(added => {
       if ((!users.some(user => user.username === added) || added === user.username)) {
         isValid = false
-        console.log('test');
 
       }
     })
@@ -493,37 +500,64 @@ export const EditMessagePopup = (props) => {
 }
 export const SettingsPopup = (props) => {
   const { onClose, open } = props
-  const { oauth, user, darkMode, setDarkmode } = useContext(Context)
-  const [fullName, setFullName] = useState('')
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [toggleChecked, setToggleCheked] = useState(true)
+  const { oauth, user, setUser, darkMode, setDarkmode } = useContext(Context)
+  const [fullName, setFullName] = useState(user.fullName)
+  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber)
+  const [toggleChecked, setToggleCheked] = useState(user.darkTheme)
+  const [avatarSelected, setAvatarSelected] = useState(user.avatar)
   const [anchorElAv, setAnchorElAv] = useState(null)
   const openAv = Boolean(anchorElAv)
   const styles = useStyles(useTheme())
+
+  let listAvatar = []
+  listAvatar.push(avatar1)
+  listAvatar.push(avatar2)
+  listAvatar.push(avatar3)
+  listAvatar.push(avatar4)
+  listAvatar.push(avatar5)
+  listAvatar.push(avatar6)
 
   const handleClose = () => {
     onClose()
   }
   const handleChangeFullName = (e) => {
     setFullName(e.target.value)
-    console.log(user);
   }
   const handleChangePhoneNumber = (e) => {
     setPhoneNumber(e.target.value)
   }
   const handleChangeThemeMode = (e) => {
     setToggleCheked(e.target.checked)
-    console.log(e.target.checked);
     setDarkmode(e.target.checked)
-  }
-  const handleSubmit = () => {
-
   }
   const handleOpenAvatar = (e) => {
     setAnchorElAv(e.currentTarget)
   }
   const handleCloseAvatar = () => {
     setAnchorElAv(null)
+  }
+  const handleClickAvatar = (avatar) => {
+    setAvatarSelected(avatar)
+  }
+  const handleSubmit = async () => {
+    const { data: updatedUser } = await axios.put(`http://localhost:3001/users/${user.id}`, {
+      username: user.username,
+      darkTheme: toggleChecked,
+      fullName: fullName,
+      phoneNumber: phoneNumber,
+      avatar: avatarSelected
+    },
+      {
+        headers: {
+          'Authorization': `Bearer ${oauth.access_token}`
+        }
+      });
+    setUser(updatedUser)
+    setFullName(updatedUser.fullName)
+    setPhoneNumber(updatedUser.phoneNumber)
+    setAvatarSelected(updatedUser.avatar)
+    handleClose(updatedUser)
+
   }
   return (
     <Dialog onClose={handleClose} open={open}>
@@ -537,12 +571,25 @@ export const SettingsPopup = (props) => {
 
         <form autoComplete='off'>
           <Box>
-            <IconButton onClick={handleOpenAvatar} size="small" sx={{ ml: 2 }}>
-              <Gravatar
-                size={30}
-                style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
-                email={oauth.email} />
-            </IconButton>
+            {
+              avatarSelected === '0'
+                ?
+                <IconButton onClick={handleOpenAvatar} size="small">
+                  <Gravatar
+                    size={40}
+                    style={{ border: 'thick double #32a1ce', borderRadius: 25 }}
+                    email={oauth.email} />
+                </IconButton>
+                :
+                <IconButton sx={{ margin: "5px" }}
+                  onClick={handleOpenAvatar} size="small"
+                >
+                  <Avatar size={30}
+                    style={{ border: 'thick double #32a1ce', borderRadius: 25, margin: 0 }}
+                    alt="" src={avatarSelected} />
+                </IconButton>
+            }
+
           </Box>
           <Menu
             anchorEl={anchorElAv}
@@ -586,18 +633,14 @@ export const SettingsPopup = (props) => {
             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           >
-            <Grid container rowSpacing={1} columnSpacing={1}
-            sx={{
-              width: "100%",
-              height:"100%",
-              margin: 0,
-              padding: 0,
-              display: "grid",
-              gridColumn: 3
-            }}>
-              <Grid item xs={4}>
+
+            <Grid columns={2}>
+              <Grid
+                display="flex"
+                justifyContent="center"
+                alignItems="center">
                 <IconButton sx={{ margin: "5px" }}
-                  onClick={handleOpenAvatar} size="small"
+                  onClick={() => handleClickAvatar('0')} size="small"
                 >
                   <Gravatar
                     size={30}
@@ -609,39 +652,28 @@ export const SettingsPopup = (props) => {
 
                 </IconButton>
               </Grid>
-              <Grid item xs={4}>
-                <IconButton onClick={handleOpenAvatar} size="small">
-                  <Gravatar
-                    size={30}
-                    style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
-                    email={oauth.email} />
-                </IconButton>
-              </Grid>
-              <Grid item xs={4}>
-                <IconButton onClick={handleOpenAvatar} size="small">
-                  <Gravatar
-                    size={30}
-                    style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
-                    email={oauth.email} />
-                </IconButton>
-              </Grid>
-              <Grid item xs={4}>
-                <IconButton onClick={handleOpenAvatar} size="small">
-                  <Gravatar
-                    size={30}
-                    style={{ border: 'thick double #32a1ce', borderRadius: 20 }}
-                    email={oauth.email} />
-                </IconButton>
-              </Grid>
+              {
+                listAvatar.map((avatar, i) => {
+                  return (
+                    <Grid
+                      key={i}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center">
+                      <IconButton sx={{ margin: "5px" }}
+                        onClick={() => handleClickAvatar(avatar)} size="small"
+                      >
+                        <Avatar size={30}
+                          style={{ border: 'thick double #32a1ce', borderRadius: 20, margin: 0 }}
+                          alt="Remy Sharp" src={avatar} />
+
+
+                      </IconButton>
+                    </Grid>
+                  )
+                })
+              }
             </Grid>
-
-              
-              
-              
-             
-
-
-
           </Menu>
           <Box sx={styles.box}>
             <TextField
