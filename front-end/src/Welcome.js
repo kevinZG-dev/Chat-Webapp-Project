@@ -24,13 +24,13 @@ const useStyles = (theme) => ({
     display: 'flex',
     // background: 'linear-gradient(to bottom, #f5f7fa, #8693ab )',
     backgroundColor: '#d7e1ec'
-    
+
   },
   button: {
 
   },
   buttonLight: {
-    '&:hover' : {
+    '&:hover': {
       backgroundColor: 'rgba(56, 109, 246, 0.2 )'
     }
   },
@@ -40,7 +40,7 @@ const useStyles = (theme) => ({
   icon: {
     width: '100%',
     fill: '#fff',
-    
+
   },
   iconLight: {
     width: '100%',
@@ -110,10 +110,14 @@ export default function Welcome() {
         open={toggleCreateChannels}
         onClose={handleCloseCreateChannels}
       />
-      <SettingsPopup 
-        open={toggleSettings}
-        onClose={handleCloseSettings}
-      />
+      {
+        toggleSettings === true
+        &&
+        <SettingsPopup
+          open={toggleSettings}
+          onClose={handleCloseSettings}
+        />
+      }
     </div>
   );
 }

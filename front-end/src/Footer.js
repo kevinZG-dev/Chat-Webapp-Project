@@ -35,9 +35,9 @@ const styles = {
 }
 
 export default function Footer() {
-  const { darkMode } = useContext(Context)
+  const { darkMode, oauth } = useContext(Context)
   return (
-    <footer style={darkMode ? styles.footer : styles.footerLight}>
+    <footer style={(darkMode || !oauth) ? styles.footer : styles.footerLight}>
       <CodeIcon />
       <span css={{ marginRight: "10px" }}>Kevin Zheng</span>
       <span>|</span>

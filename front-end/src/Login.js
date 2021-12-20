@@ -13,7 +13,7 @@ import Context from './Context'
 import {
   useNavigate
 } from "react-router-dom";
-
+import screenLight from './icons/screenLight.png'
 import Button from '@mui/material/Button'
 
 
@@ -99,6 +99,15 @@ const Redirect = ({
         borderRadius: 20
       }}
         onClick={redirect} variant='contained'>Login</Button>
+      <h1></h1>
+        <div css={{ margin: "200px", display: "flex", flexDirection: "row", justifyContent: "center"}}>
+          <img css={{border: "solid", borderColor: "lightblue", width: "30vw", maxWidth: "500px", borderRadius: 20}}src={screenLight} alt="screenLight" />
+          <div css={{marginLeft: "20px", display: "flex", flexDirection:"column"}}>
+          
+          <h1 css={{color: "lightblue"}}>A revolutionnary interface</h1>
+          <span>Blablate is now available with a lightmode! Try it! </span>
+          </div>
+        </div>
 
     </div>
 

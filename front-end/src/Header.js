@@ -3,6 +3,7 @@
 import { useContext, useState } from 'react';
 // Layout
 import { makeStyles, useTheme } from '@mui/styles';
+import { useCookies } from 'react-cookie'
 import { IconButton, Link, Tooltip } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Context from './Context';
@@ -87,16 +88,18 @@ export default function Header({
     oauth, setOauth,
     drawerVisible, setDrawerVisible, darkMode, user
   } = useContext(Context)
+  const [cookies, setCookie, removeCookie] = useCookies([])
   const [anchorEl, setAnchorEl] = useState(null)
   const [toggleSettings, setToggleSettings] = useState(false)
   const open = Boolean(anchorEl)
-  
+
   const drawerToggle = (e) => {
     setDrawerVisible(!drawerVisible)
   }
   const onClickLogout = (e) => {
     e.stopPropagation()
     setOauth(null)
+    removeCookie('user')
   }
   const handleOpenProfile = (e) => {
     setAnchorEl(e.currentTarget)
@@ -123,13 +126,12 @@ export default function Header({
       <img css={styles.logoimg} src={(darkMode || !oauth) ? logoBlanc : logoCouleur} alt="Logo" />
       <h1 css={(darkMode || !oauth) ? styles.logo : styles.logoLight}>Blabla</h1>
 
-
       {
-        oauth ?
+        (user && oauth) ?
           <span css={styles.content}>
             <Tooltip title="Account">
               {
-                user.avatar === '0'
+                user.avatar==='0'
                   ?
                   <IconButton onClick={handleOpenProfile} size="small" sx={{ ml: 2 }}>
                     <Gravatar
@@ -233,10 +235,15 @@ export default function Header({
                 }
               }}
               variant='text' onClick={onClickLogout}>Logout</Button>
-            <SettingsPopup
-              open={toggleSettings}
-              onClose={handleCloseSettings}
-            />
+            {
+              toggleSettings===true
+              &&
+              <SettingsPopup
+                open={toggleSettings}
+                onClose={handleCloseSettings}
+              />
+            }
+
           </span>
           :
           <span css={styles.content}>New user</span>

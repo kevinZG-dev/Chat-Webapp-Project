@@ -39,7 +39,6 @@ export const Provider = ({
       setUser: (user) => {
         if (user) {
           setCookie('user', user)
-          console.log(cookies)
         } else {
           removeCookie('user')
         }
