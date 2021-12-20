@@ -79,7 +79,7 @@ We kept the project structure provided by the professor
 
 ### Code quality (4/4) ✅
 
-We respect indentation of 2 spaces and unnecessary line spaces. We use as much as possible react functionnalities such as the hook useState to have a good React Web app.
+We respect indentation of 2 spaces and unnecessary line spaces. We use as much as possible react functionnalities such as the hook useState to have a good React Web app. We put in a "Popup.js", all the dialogs of the the web application. It allows to us to reuse dialogs components where we want very easily. 
 
 ### Design, UX (4/4) ✅
 
