@@ -1,7 +1,5 @@
 
 /** @jsxImportSource @emotion/react */
-
-import { color, display } from "@mui/system";
 import { useContext } from "react";
 import Context from "./Context";
 import CodeIcon from '@mui/icons-material/Code';
@@ -17,7 +15,6 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
-
   },
   footerLight: {
     height: '30px',
@@ -30,7 +27,6 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
-
   },
 }
 

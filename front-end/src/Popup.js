@@ -4,24 +4,17 @@ import { useContext } from 'react'
 import { useTheme } from '@mui/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import Context from './Context'
 import { useNavigate } from 'react-router-dom';
-import { maxWidth, textAlign } from '@mui/system';
 import { styled } from '@mui/material/styles';
-import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import Gravatar from 'react-gravatar';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import { Grid } from '@mui/material';
 import { Avatar } from '@mui/material';
-import avatar7 from './avatar/7.png'
 import avatar1 from './avatar/1.png'
 import avatar2 from './avatar/2.png'
 import avatar3 from './avatar/3.png'
@@ -29,7 +22,6 @@ import avatar4 from './avatar/4.png'
 import avatar5 from './avatar/5.png'
 import avatar6 from './avatar/6.png'
 const useStyles = (theme) => {
-
   return {
     paperChannel: {
       background: 'linear-gradient(to bottom, #103c76, #380036 )',
@@ -44,7 +36,6 @@ const useStyles = (theme) => {
       padding: '30px',
       width: '80vw',
       maxWidth: '350px'
-
     },
     box: {
       margin: '15px'
@@ -131,11 +122,9 @@ export const ChannelPopup = (props) => {
     added.forEach(added => {
       if ((!users.some(user => user.username === added) || added === user.username)) {
         isValid = false
-
       }
     })
     return isValid
-
   }
   const handleSubmit = async (e) => {
     if (channelName !== '') {
@@ -150,17 +139,14 @@ export const ChannelPopup = (props) => {
         listOfAddedUsers = stringOfListWithoutSpace.split(',')
         finalListEmail = listEmail.concat(listOfAddedUsers)
         isValided = await isValidAddUsers(listOfAddedUsers)
-
       } else {
         finalListEmail = [...listEmail]
       }
       if (isValided) {
-
         const { data: channel } = await axios.post('http://localhost:3001/channels/', {
           name: `${channelName}`,
           creator: `${oauth.email}`,
           listOfUsers: finalListEmail
-
         }, {
           headers: {
             'Authorization': `Bearer ${oauth.access_token}`
@@ -172,15 +158,11 @@ export const ChannelPopup = (props) => {
       } else {
         setToggleValidationAddUsers(false)
       }
-
     }
-
-
   }
   return (
     <Dialog onClose={handleClose} open={open}>
       <Paper sx={styles.paperChannel}>
-
         <DialogTitle>Create new channel</DialogTitle>
         <form autoComplete='off' onSubmit={handleSubmit} >
           <Box sx={styles.box}>
@@ -259,7 +241,6 @@ export const AddUserPopup = (props) => {
   const handleChange = (e) => {
     setUsersNames(e.target.value)
     setToggleValidationAddUsers(true)
-
   }
   const updateChannels = (channelRet) => {
     const updatedChannels = channels.map(channel => {
@@ -284,18 +265,15 @@ export const AddUserPopup = (props) => {
       }
     })
     return isValid
-
   }
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (usersNames !== '') {
-
       const stringOfListWithoutSpace = usersNames.replace(/\s/g, '')
       const listOfAddedUsers = stringOfListWithoutSpace.split(',')
       const finalListEmail = channel.listOfUsers.concat(listOfAddedUsers)
       const isValided = await isValidAddUsers(listOfAddedUsers, channel.listOfUsers)
       if (isValided) {
-
         const { data: channelRet } = await axios.put(`http://localhost:3001/channels/${channel.id}`, {
           name: `${channel.name}`,
           creator: `${oauth.email}`,
@@ -378,7 +356,6 @@ export const DeleteChannelPopup = (props) => {
     onClose()
   }
   const handleSubmit = async () => {
-
     await axios.delete(`http://localhost:3001/channels/${channel.id}`, {
       headers: {
         'Authorization': `Bearer ${oauth.access_token}`
@@ -432,7 +409,6 @@ export const DeleteChannelPopup = (props) => {
     </Dialog>
   )
 }
-
 export const EditMessagePopup = (props) => {
   const { open, onClose, message, channelId, editMessage } = props
   const { oauth } = useContext(Context)
@@ -447,12 +423,10 @@ export const EditMessagePopup = (props) => {
     setNewMessage(e.target.value)
   }
   const handleSubmit = async (e) => {
-
     e.preventDefault()
     await axios.put(`http://localhost:3001/channels/${channelId}/messages`, {
       author: `${message.author}`,
       content: `${newMessage}`,
-
     }, {
       params: {
         creation: `${message.creation}`
@@ -465,15 +439,11 @@ export const EditMessagePopup = (props) => {
     editMessage(newMessage, message.creation)
     setNewMessage('')
     handleClose()
-
-
   }
   return (
     <Dialog onClose={handleClose} open={open}>
       <Paper sx={styles.paperChannel}>
         <DialogTitle>Edit Message</DialogTitle>
-
-
         <form autoComplete='off' onSubmit={handleSubmit} >
           <Box sx={styles.box}>
             <TextField

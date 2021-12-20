@@ -22,14 +22,12 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#103c76',
- 
   },
   rootLight: {
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#f5f7fa',
-
   },
 }
 

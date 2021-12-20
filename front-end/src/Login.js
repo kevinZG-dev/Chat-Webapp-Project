@@ -16,27 +16,22 @@ import {
 import screenLight from './icons/screenLight.png'
 import Button from '@mui/material/Button'
 
-
 const base64URLEncode = (str) => {
   return str.toString('base64')
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=/g, '');
 }
-
 const sha256 = (buffer) => {
   return crypto
     .createHash('sha256')
     .update(buffer)
     .digest()
 }
-
 const useStyles = (theme) => ({
   root: {
-
     flex: '1 1 auto',
     flexDirection: "column",
-
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -60,8 +55,6 @@ const useStyles = (theme) => ({
     margin: 3,
     fontSize: "40px"
   }
-
-
 })
 
 const Redirect = ({
@@ -84,13 +77,11 @@ const Redirect = ({
     window.location = url
   }
   return (
-
     <div css={styles.root}>
       <h1 css={styles.suppr}>Blablate</h1>
       <h1 css={styles.suppr}>with your friends!</h1>
       <h3>The best messaging app to chat easily with all your friends</h3>
       <Button sx={{
-
         color: "#344dff",
         backgroundColor: "#f1f1f1",
         width: 150,
@@ -108,11 +99,8 @@ const Redirect = ({
           <span>Blablate is now available with a lightmode! Try it! </span>
           </div>
         </div>
-
     </div>
-
   )
-
 }
 
 const Tokens = ({
@@ -157,10 +145,8 @@ const LoadToken = ({
             redirect_uri: `${config.redirect_uri}`,
             code: `${code}`,
           }))
-        //console.log(data)
         removeCookie('code_verifier')
         setOauth(data)
-
         try {
           const { data: users } = await axios.get(`http://localhost:3001/users`, {
             headers: {
@@ -187,17 +173,13 @@ const LoadToken = ({
                   'Authorization': `Bearer ${data.access_token}`
                 }
               });
-            console.log(currentUser.data);
             setUser(currentUser.data)
-
           }
-
         } catch (err) {
           console.error(
             "Error to check users in db or adding in"
           );
         }
-
         navigate('/')
       } catch (err) {
         console.error(err)

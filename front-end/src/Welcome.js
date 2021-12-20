@@ -2,7 +2,7 @@
 /** @jsxImportSource @emotion/react */
 // Layout
 import { useTheme } from '@mui/styles';
-import { Grid, setRef, Typography, Button } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { ReactComponent as ChannelIcon } from './icons/channel.svg';
 import { ReactComponent as FriendsIcon } from './icons/friends.svg';
 import { ReactComponent as SettingsIcon } from './icons/settings.svg';
@@ -24,10 +24,6 @@ const useStyles = (theme) => ({
     display: 'flex',
     // background: 'linear-gradient(to bottom, #f5f7fa, #8693ab )',
     backgroundColor: '#d7e1ec'
-
-  },
-  button: {
-
   },
   buttonLight: {
     '&:hover': {
@@ -40,14 +36,11 @@ const useStyles = (theme) => ({
   icon: {
     width: '100%',
     fill: '#fff',
-
   },
   iconLight: {
     width: '100%',
     fill: '#1E2634',
-
   },
-
 })
 
 export default function Welcome() {
@@ -57,7 +50,6 @@ export default function Welcome() {
   const [toggleSettings, setToggleSettings] = useState(false)
   const handleOpenCreateChannels = () => {
     setToggleCreateChannels(true)
-
   }
   const handleCloseCreateChannels = () => {
     setToggleCreateChannels(false)

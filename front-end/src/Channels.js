@@ -13,9 +13,7 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Context from './Context'
 import { useNavigate } from 'react-router-dom'
-import { Button, MenuList, Divider, MenuItem } from '@mui/material'
-import { width } from '@mui/system';
-import Login from './Login';
+import { Button, Divider } from '@mui/material'
 import { ChannelPopup } from './Popup';
 import AddIcon from '@mui/icons-material/Add';
 const styles = {
@@ -26,15 +24,13 @@ const styles = {
     '& a': {
       padding: '.2rem .5rem',
       whiteSpace: 'nowrap',
-
     }
-  },
+  }
 }
-
 export default function Channels() {
   const {
     oauth,
-    channels, setChannels, setCurrentChannel, darkMode, user
+    channels, setChannels, setCurrentChannel, darkMode
   } = useContext(Context)
   const [toggleCreateChannels, setToggleCreateChannels] = useState(false)
   const naviate = useNavigate();
@@ -58,12 +54,10 @@ export default function Channels() {
   }, [oauth, setChannels])
   const handleOpenCreateChannels = () => {
     setToggleCreateChannels(true)
-
   }
   const handleCloseCreateChannels = () => {
     setToggleCreateChannels(false)
   }
-
   return (
     <ul css={styles.root}>
       <li css={styles.channel}>
@@ -80,7 +74,6 @@ export default function Channels() {
           marginTop: 1,
           backgroundColor: !darkMode && "#8693ab"
         }} />
-
       </li>
       <Accordion sx={{
         color: !darkMode && '#1E2634',
@@ -95,11 +88,9 @@ export default function Channels() {
           id="panela-header"
           sx={{
             backgroundColor: darkMode ? '#103c76' : '#f5f7fa',
-
           }}
         >
           <Typography>Channels</Typography>
-
         </AccordionSummary>
         <AccordionDetails sx={{
           padding: 0,
@@ -107,7 +98,6 @@ export default function Channels() {
         }}>
           {channels.map((channel, i) => (
             <li key={i} css={styles.channel}>
-
               <Button
                 sx={{
                   margin: 0,
@@ -128,7 +118,6 @@ export default function Channels() {
                   e.preventDefault()
                   naviate(`/channels/${channel.id}`)
                   setCurrentChannel(`${channel.id}`)
-
                 }}
               >
                 {channel.name}
@@ -137,7 +126,6 @@ export default function Channels() {
           ))}
         </AccordionDetails>
       </Accordion>
-      
       <IconButton onClick={handleOpenCreateChannels}
         sx={{ color: !darkMode && '#1E2634',}}
       >
@@ -147,7 +135,6 @@ export default function Channels() {
         open={toggleCreateChannels}
         onClose={handleCloseCreateChannels}
       />
-
     </ul>
   );
 }

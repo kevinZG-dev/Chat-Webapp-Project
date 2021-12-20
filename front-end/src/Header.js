@@ -2,27 +2,21 @@
 /** @jsxImportSource @emotion/react */
 import { useContext, useState } from 'react';
 // Layout
-import { makeStyles, useTheme } from '@mui/styles';
+import { useTheme } from '@mui/styles';
 import { useCookies } from 'react-cookie'
-import { IconButton, Link, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Context from './Context';
 import Button from '@mui/material/Button';
 import logoBlanc from './icons/logo-blanc.png'
 import logoCouleur from './icons/logo-couleur.png'
 import Gravatar from 'react-gravatar'
-import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-
-import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import { fontWeight } from '@mui/system';
 import { SettingsPopup } from './Popup';
 const useStyles = (theme) => ({
   header: {
@@ -62,7 +56,6 @@ const useStyles = (theme) => ({
     display: 'block',
     color: '#1E2634'
   },
-
   content: {
     display: 'inline-flex',
     paddingRight: '50px',
@@ -125,7 +118,6 @@ export default function Header({
       </IconButton>
       <img css={styles.logoimg} src={(darkMode || !oauth) ? logoBlanc : logoCouleur} alt="Logo" />
       <h1 css={(darkMode || !oauth) ? styles.logo : styles.logoLight}>Blabla</h1>
-
       {
         (user && oauth) ?
           <span css={styles.content}>
@@ -148,7 +140,6 @@ export default function Header({
                       alt="" src={user.avatar} />
                   </IconButton>
               }
-
             </Tooltip>
             <Menu
               anchorEl={anchorEl}
@@ -164,7 +155,6 @@ export default function Header({
                   background: darkMode
                     ? 'linear-gradient(to bottom, #103c76, #380036 )'
                     : 'linear-gradient(to bottom, #f5f7fa, #537895 )',
-
                   mt: 1.5,
                   '& .MuiAvatar-root': {
                     width: 32,
@@ -188,7 +178,6 @@ export default function Header({
                   },
                 },
               }}
-
               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
@@ -207,9 +196,7 @@ export default function Header({
                 >
                   {oauth.email}</span>
               </MenuItem>
-
               <Divider />
-
               <MenuItem
                 onClick={handleOpenSettings}
                 sx={{
@@ -225,7 +212,6 @@ export default function Header({
                 </ListItemIcon>
                 Settings
               </MenuItem>
-
             </Menu>
             <Button
               sx={{
@@ -243,13 +229,10 @@ export default function Header({
                 onClose={handleCloseSettings}
               />
             }
-
           </span>
           :
           <span css={styles.content}>New user</span>
       }
-
-
     </header>
   );
 }
