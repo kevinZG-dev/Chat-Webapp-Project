@@ -1,4 +1,4 @@
-# Chat application - final project
+# Blabla application - final project
 
 The aim of this project is to developp an Web App with React and Node.js. This Web app allows users to chat with others people throught differents channels. Please follow the instructions below to run the project and understand all the functionnalities.
 
@@ -8,8 +8,8 @@ _how to start and use the application, run the tests, ..._
 
 - Clone this repository, from your local machine:
   ```
-  git clone
-  cd WebTech/project
+  git clone https://github.com/maximeattal/WebTech.git
+  cd WebTech
   ```
 - Install [Go](https://golang.org/) and [Dex](https://dexidp.io/docs/getting-started/). For example, on Ubuntu, from your project root directory:
   ```yaml
@@ -101,20 +101,35 @@ For the welcome page after they log in, we allow people to create a channels and
   _place your graduation and comments_
 - Channel membership and access  
   _place your graduation and comments_
-- Ressource access control  
-  _place your graduation and comments_
-- Invite users to channels  
-  _place your graduation and comments_
-- Message modification  
-  _place your graduation and comments_
-- Message removal  
-  _place your graduation and comments_
+
+### Ressource access control (4/4)
+
+The user only have the access to the channel he created or the channels he was invited to. For that the back-end only send the channels who he is members when he log in. 
+We stored the user logged in in cookie of browser otherwize when we refresh the page, the user in context is undefined. After we remove cookie when he logout.
+
+### Invite users to channels  (6/6)
+
+The user have the possibility to invite other users in a channel at the begenning when he create the channel or after the creation of the channel throught a dialog screen. The user can only invite users who are present in the users database, and only who are not already present in the channel, otherwize the textfield said to enter valid users or users already in the channel. We update the channel after the validation of the form and it perist the updated channel in the database and display in reel time on the user screen. After have invite new users, they can have access on the channel.
+
+### Message modification (2/2)
+
+The user can send a message and can edit it after sending. Users can only edit messages they have sent and not those of other users. The user must to click on the more action button and a dropdown menu appears and he have the choice to edit or delete a message. The modification of messages are persistent in the database and it display in reel time on the screen of the user. 
+
+### Message removal (2/2)
+
+The user can send a message and can delete it. He also can only remove messages they have sent and not those of other users. The menu dropdown when clicking on more action button appears and he can remove the message. It is persistent in database and it display in reel time on the screen of the user.
+
+
 - Account settings  
   _place your graduation and comments_
 - Gravatar integration  
   _place your graduation and comments_
-- Avatar selection  
-  _place your graduation and comments_
+
+### Avatar selection (4/4)
+
+The user have the possibilities to select an avatar among a selection of avatars that we provide in the settings dialog. A menu dropdown are displayed when he clicks on his avatar, and he change his avatar if he wants. This modification is persistent in the database for the user when he valid the form. It is updated and displayed in reel time in front. 
+
+
 - Personal custom avatar  
   _place your graduation and comments_
 
