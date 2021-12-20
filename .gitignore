@@ -4,3 +4,4 @@ node_modules
 /back-end/db
 !.gitignore
 dex
+front-end/package-lock.json

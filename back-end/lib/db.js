@@ -132,10 +132,10 @@ const api = {
         })
       })
     },
-    update: (id, user) => {
-      const original = store.users[id]
-      if (!original) throw Error('Unregistered user id')
-      store.users[id] = merge(original, user)
+    update: async (id, user) => {
+      if (!id) throw Error("Invalid user");
+      await db.put(`users:${id}`, JSON.stringify(user));
+      return merge(user, { id: id});
     },
     delete: (id, user) => {
       const original = store.users[id]
